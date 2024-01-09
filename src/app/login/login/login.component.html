@@ -1,0 +1,44 @@
+<mat-toolbar style="background-color: darkturquoise;">
+    <mat-toolbar-row fxLayout="row">
+        <span style="color: red;">Đăng nhập</span>
+        <span class="spacer"></span>
+        <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+            <mat-icon style="color: red;">close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="loginForm">
+        <div fxFlex fxLayout="column">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Tên đăng nhập</mat-label>
+                <input matInput formControlName="userName" required>
+                <mat-error *ngIf="loginForm.controls.userName.touched && loginForm.controls.userName.invalid">
+                    <span *ngIf="loginForm.controls.userName.errors?.required">Tên đăng nhập không được để trống</span>
+                    <span *ngIf="loginForm.controls.userName.errors?.pattern">Phải nhập đúng định dạng tên đăng
+                        nhập</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Mật khẩu</mat-label>
+                <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+                <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
+                    <span *ngIf="loginForm.controls.password.errors?.required">Mật khẩu không được để trống</span>
+                </mat-error>
+            </mat-form-field>
+            
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"[disabled]="!isFormValid">
+        <mat-icon>login</mat-icon>Đăng nhập
+      </button>
+</mat-dialog-actions>

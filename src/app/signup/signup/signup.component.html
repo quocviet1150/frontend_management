@@ -1,9 +1,9 @@
-<mat-toolbar color="danger">
+<mat-toolbar style="background-color: darkturquoise;">
     <mat-toolbar-row fxLayout="row">
-        <span>Đăng ký</span>
+        <span style="color: red;">Đăng ký</span>
         <span class="spacer"></span>
         <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
-            <mat-icon>close</mat-icon>
+            <mat-icon style="color: red;">close</mat-icon>
         </button>
     </mat-toolbar-row>
 </mat-toolbar>
@@ -76,7 +76,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()" [disabled]="validateSubmit() || !(signupForm.invalid && signupForm.dirty)">
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"[disabled]="!isFormValid">
         <mat-icon>save</mat-icon>Đăng ký
       </button>
       

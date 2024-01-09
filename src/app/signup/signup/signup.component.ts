@@ -40,34 +40,34 @@ export class SignupComponent implements OnInit {
   }
 
   handleSubmit() {
-    if (this.signupForm.invalid) {
-      return ;
-    } else {
-      this.loading = true;
-      var formData = this.signupForm.value;
-      var data = {
-        name: formData.name,
-        userName: formData.userName,
-        contactNumber: formData.contactNumber,
-        password: formData.password
-      }
 
-      this.userService.signup(data).subscribe((response: any) => {
-        this.loading = false;
-        this.dialogRef.close();
-        this.responseMessage = response?.message;
-        this.snackbarService.openSnackbar(this.responseMessage, "");
-        this.router.navigate(['/']);
-      }, (error) => {
-        this.loading = false;
-        if (error.error?.message) {
-          this.responseMessage = GlobalConstants.genericError;
-        }
-        this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error);
-      })
+    this.loading = true;
+    var formData = this.signupForm.value;
+    var data = {
+      name: formData.name,
+      userName: formData.userName,
+      contactNumber: formData.contactNumber,
+      password: formData.password
     }
 
-
+    this.userService.signup(data).subscribe((response: any) => {
+      this.loading = false;
+      this.dialogRef.close();
+      this.responseMessage = response?.message;
+      this.snackbarService.openSnackbar(this.responseMessage, "");
+      this.router.navigate(['/']);
+    }, (error) => {
+      this.loading = false;
+      if (error.error?.message) {
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error);
+    })
   }
+
+  get isFormValid() {
+    return this.signupForm.valid && this.signupForm.dirty;
+  }
+
 
 }
