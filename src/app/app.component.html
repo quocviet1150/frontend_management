@@ -1,1 +1,10 @@
 <router-outlet></router-outlet>
+<ngx-loading
+      [show]="loading"
+      [config]="{
+        animationType: ngxLoadingAnimationTypes.rectangleBounce,
+        primaryColour: primaryColour,
+        backdropBorderRadius: '3px'
+      }"
+      [template]="loadingTemplate"
+    ></ngx-loading>

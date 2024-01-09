@@ -13,16 +13,20 @@ import { SharedModule } from './shared/shared.module';
 import { FullComponent } from './layouts/full/full.component';
 import { AppHeaderComponent } from './layouts/full/header/header.component';
 import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
+import { HttpClientModule } from '@angular/common/http';
+import { SignupComponent } from './signup/signup/signup.component';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from "ngx-loading";
 
 @NgModule({
-  declarations: [	
+  declarations: [
     AppComponent,
     HomeComponent,
     BestSellerComponent,
     FullComponent,
     AppHeaderComponent,
-    AppSidebarComponent
-   ],
+    AppSidebarComponent,
+    SignupComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,7 +35,17 @@ import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
     ReactiveFormsModule,
     MaterialModule,
     FlexLayoutModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule,
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.wanderingCubes,
+      backdropBackgroundColour: 'rgba(0,0,0,0.5)',
+      backdropBorderRadius: '4px',
+      primaryColour: '#ffffff',
+      secondaryColour: '#ffffff',
+      tertiaryColour: '#ffffff',
+      fullScreenBackdrop: true,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
