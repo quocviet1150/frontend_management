@@ -17,9 +17,11 @@ export class BillService {
     })
   }
 
-  // getPdf(data: any): Observable<Blob> {
-  //   return this.httpClient.get(this.url + "/bill/get_bills", data, { responseType: blob });
-  // }
+  getPdf(data: any): Observable<Blob> {
+    return this.httpClient.post(this.url + "/bill/get_pdf", data, { responseType: 'blob' });
+  }
 
- 
+  getBill(data: any) {
+    return this.httpClient.get(this.url + "/bill/get_bills");
+  }
 }
