@@ -19,6 +19,7 @@ export class AppHeaderComponent {
   }
   logout() {
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "400px";
     dialogConfig.data = {
       message: 'Đăng xuất',
       confirmation: true

@@ -1,5 +1,5 @@
 <body>
-    <mat-card [routerLink]="['/vietnq/dashboard']" style="cursor: pointer;">
+    <mat-card >
         <b><span>Trang chủ</span></b>
     </mat-card>
     <br>
@@ -7,9 +7,9 @@
         <div class="column">
             <div class="card">
                 <div class="container">
-                    <h2 class="title">Tổng số loại:</h2>
+                    <h2 class="title">Tổng số danh mục:</h2>
                     <h1 class="title">{{data?.category}}</h1>
-                    <p><button class="button" [routerLink]="['/vietnq/category']">Xem loại</button></p>
+                    <p><button class="button" [routerLink]="['/vietnq/category']">Xem danh mục</button></p>
                 </div>
             </div>
         </div>

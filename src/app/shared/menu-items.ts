@@ -13,7 +13,7 @@ const MENUITEMS = [
         state: 'dashboard', name: 'Trang chủ', type: 'link', icon: 'dashboard', role: ''
     },
     {
-        state: 'category', name: 'Loại', type: 'link', icon: 'category', role: 'admin'
+        state: 'category', name: 'Danh mục', type: 'link', icon: 'category', role: 'admin'
     }
 ]
 
