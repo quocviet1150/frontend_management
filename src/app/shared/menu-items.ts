@@ -14,6 +14,9 @@ const MENUITEMS = [
     },
     {
         state: 'category', name: 'Danh mục', type: 'link', icon: 'category', role: 'admin'
+    },
+    {
+        state: 'product', name: 'Sản phẩm', type: 'link', icon: 'inventory_2', role: 'admin'
     }
 ]
 

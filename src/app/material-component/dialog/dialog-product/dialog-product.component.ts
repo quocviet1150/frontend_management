@@ -2,40 +2,60 @@ import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/services/category.service';
+import { ProductService } from 'src/app/services/product.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 
 @Component({
-  selector: 'app-dialog-category',
-  templateUrl: './dialog-category.component.html',
-  styleUrls: ['./dialog-category.component.scss']
+  selector: 'app-dialog-product',
+  templateUrl: './dialog-product.component.html',
+  styleUrls: ['./dialog-product.component.scss']
 })
-export class DialogCategoryComponent implements OnInit {
+export class DialogProductComponent implements OnInit {
 
-  onAddCategory = new EventEmitter();
-  onEditCategory = new EventEmitter();
-  categoryForm: any = FormGroup;
+  onAddProduct = new EventEmitter();
+  onEditProduct = new EventEmitter();
+  productForm: any = FormGroup;
   dialogAction: any = "Thêm mới";
   action: any = "Thêm mới";
   responseMessage: any;
+  categorys: any = [];
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public dialogData: any,
+  constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any,
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
-    private dialogRef: MatDialogRef<DialogCategoryComponent>,
-    private snackbarService: SnackbarService,
-  ) { }
+    private productService: ProductService,
+    private dialogRef: MatDialogRef<DialogProductComponent>,
+    private snackbarService: SnackbarService,) { }
 
   ngOnInit(): void {
-    this.categoryForm = this.formBuilder.group({
-      name: [null, [Validators.required]]
+    this.productForm = this.formBuilder.group({
+      name: [null, [Validators.required]],
+      categoryId: [null, [Validators.required]],
+      description: [null, [Validators.required]],
+      price: [null, [Validators.required]]
     });
     if (this.dialogData.action === 'Chỉnh sửa') {
       this.dialogAction = 'Chỉnh sửa';
       this.action = "Update"
-      this.categoryForm.patchValue(this.dialogData.data);
+      this.productForm.patchValue(this.dialogData.data);
     }
+    this.getCategorys();
+  }
+
+  getCategorys() {
+    this.categoryService.getCategorys().subscribe((response: any) => {
+      this.categorys = response;
+    }, (error) => {
+      this.dialogRef.close();
+      console.log(error);
+      if (error.error?.message) {
+        this.responseMessage = error.error?.message;
+      } else {
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
+    })
   }
 
   handleSubmit() {
@@ -47,14 +67,17 @@ export class DialogCategoryComponent implements OnInit {
   }
 
   add() {
-    var formData = this.categoryForm.value;
+    var formData = this.productForm.value;
     var data = {
-      name: formData.name
+      name: formData.name,
+      categoryId: formData.categoryId,
+      price: formData.price,
+      description: formData.description,
     }
 
-    this.categoryService.createCategory(data).subscribe((response: any) => {
+    this.productService.createProduct(data).subscribe((response: any) => {
       this.dialogRef.close();
-      this.onAddCategory.emit();
+      this.onAddProduct.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error) => {
@@ -67,19 +90,21 @@ export class DialogCategoryComponent implements OnInit {
       }
       this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
     })
-
   }
 
   edit() {
-    var formData = this.categoryForm.value;
+    var formData = this.productForm.value;
     var data = {
       id: this.dialogData.data.id,
-      name: formData.name
+      name: formData.name,
+      categoryId: formData.categoryId,
+      price: formData.price,
+      description: formData.description,
     }
 
-    this.categoryService.update_category(data).subscribe((response: any) => {
+    this.productService.updateProduct(data).subscribe((response: any) => {
       this.dialogRef.close();
-      this.onEditCategory.emit();
+      this.onEditProduct.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error) => {
@@ -95,7 +120,7 @@ export class DialogCategoryComponent implements OnInit {
   }
 
   get isFormValid() {
-    return this.categoryForm.valid && this.categoryForm.dirty;
+    return this.productForm.valid && this.productForm.dirty;
   }
 
 }
