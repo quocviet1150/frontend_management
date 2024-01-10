@@ -35,6 +35,7 @@ export class SignupComponent implements OnInit {
       confirmPassword: [null, [Validators.required]]
     })
   }
+  
   validateSubmit(): boolean {
     return this.signupForm.controls['password'].value !== this.signupForm.controls['confirmPassword'].value;
   }
