@@ -15,7 +15,7 @@ import { ViewBillProductsComponent } from '../dialog/view-bill-products/view-bil
 })
 export class ViewBillComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'category', 'price', 'quantity', 'total', 'edit'];
+  displayedColumns: string[] = ['name', 'email', 'contactNumber', 'paymentMethod', 'total', 'view'];
   dataSource: any = [];
   responseMessage: any;
 
@@ -32,6 +32,7 @@ export class ViewBillComponent implements OnInit {
   }
 
   tableData() {
+    debugger
     this.billService.getBill().subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
@@ -60,5 +61,13 @@ export class ViewBillComponent implements OnInit {
     this.router.events.subscribe(() => {
       dialogRef.close();
     })
+  }
+
+  handleDeleteAction(value: any){
+
+  }
+
+  handleDowloadAction(value:any){
+    
   }
 }

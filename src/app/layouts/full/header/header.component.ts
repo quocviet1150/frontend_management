@@ -21,7 +21,7 @@ export class AppHeaderComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "400px";
     dialogConfig.data = {
-      message: 'Đăng xuất',
+      message: 'đăng xuất không',
       confirmation: true
     };
 
