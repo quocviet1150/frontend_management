@@ -50,6 +50,7 @@
                 </button>
                 <mat-error *ngIf="signupForm.controls.password.touched && signupForm.controls.password.invalid">
                     <span *ngIf="signupForm.controls.password.errors?.required">Mật khẩu không được để trống</span>
+                    <span *ngIf="signupForm.controls.password.errors?.pattern">Định dạng mật khẩu không chính xác</span>
                 </mat-error>
             </mat-form-field>
 
