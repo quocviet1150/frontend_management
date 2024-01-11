@@ -24,7 +24,7 @@ export const MaterialRoutes: Routes = [
         }
     },
     {
-        path: 'order',
+        path: 'bill',
         component: BillComponent,
         canActivate: [RouteGuardService],
         data: {

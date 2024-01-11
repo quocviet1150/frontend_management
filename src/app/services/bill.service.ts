@@ -24,4 +24,5 @@ export class BillService {
   getBill(data: any) {
     return this.httpClient.get(this.url + "/bill/get_bills");
   }
+
 }

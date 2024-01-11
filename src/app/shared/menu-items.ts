@@ -19,7 +19,7 @@ const MENUITEMS = [
         state: 'product', name: 'Sản phẩm', type: 'link', icon: 'inventory_2', role: 'admin'
     },
     {
-        state: 'order', name: 'Quản lý đơn đặt hàng', type: 'link', icon: 'shopping_cart', role: ''
+        state: 'bill', name: 'Quản lý đơn đặt hàng', type: 'link', icon: 'shopping_cart', role: ''
     }
 ]
 

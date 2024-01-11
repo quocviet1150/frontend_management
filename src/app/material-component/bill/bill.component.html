@@ -1,1 +1,168 @@
-<p>bill works!</p>
+<mat-card>
+    <b>
+        <span>Quản lý đơn hàng</span>
+    </b>
+    <button mat-flat-button color="primary" class="float-right" [disabled]="validateSubmit()" (click)="submitAction()">
+        <mat-icon>print</mat-icon> Gửi & Nhận hóa đơn
+    </button>
+</mat-card>
+<hr>
+
+<mat-card>
+    <b>
+        <span>Chi tiết khách hàng</span>
+    </b>
+    <form [formGroup]="billForm">
+        <div fxFlex fxLayout="column">
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Tên khách hàng</mat-label>
+                    <input matInput formControlName="name" required>
+                    <mat-error *ngIf="billForm.controls.name.touched && billForm.controls.name.invalid">
+                        <span *ngIf="billForm.controls.name.errors.required">Không được để trống tên </span>
+                        <span *ngIf="billForm.controls.name.errors.pattern">Tên không đúng định dạng</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Email khách hàng</mat-label>
+                    <input matInput formControlName="email" required>
+                    <mat-error *ngIf="billForm.controls.email.touched && billForm.controls.email.invalid">
+                        <span *ngIf="billForm.controls.email.errors.required">Không được để trống email</span>
+                        <span *ngIf="billForm.controls.email.errors.pattern">Email không đúng định dạng</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Số điện thoại khách hàng</mat-label>
+                    <input matInput formControlName="contactNumber" required>
+                    <mat-error
+                        *ngIf="billForm.controls.contactNumber.touched && billForm.controls.contactNumber.invalid">
+                        <span *ngIf="billForm.controls.contactNumber.errors.required">Không được để trống số điện
+                            thoại</span>
+                        <span *ngIf="billForm.controls.contactNumber.errors.pattern">Số điện thoại không đúng định
+                            dạng</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Phương thức thanh toán</mat-label>
+                    <mat-select formControlName="paymentMethod" required>
+                        <mat-option value=""></mat-option>
+                        <mat-option value="cash">Tiền mặt</mat-option>
+                        <mat-option value="credit card">Thẻ tín dụng</mat-option>
+                        <mat-option value="debit card">Thẻ ghi nợ</mat-option>
+                    </mat-select>
+
+                    <mat-error
+                        *ngIf="billForm.controls.paymentMethod.touched && billForm.controls.paymentMethod.invalid">
+                        <span *ngIf="billForm.controls.paymentMethod.errors.required">Không được để trống phương thức
+                            thanh toán</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-card>
+<hr>
+
+<mat-card>
+    <b>
+        <span>Chọn sản phẩm</span>
+    </b>
+    <form [formGroup]="billForm">
+        <div fxFlex fxLayout="column">
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Tên danh mục</mat-label>
+                    <mat-select formControlName="category" (selectionChange)="getProductsByCategory($event.value)">
+                        <mat-option *ngFor="let category of categorys" [value]="category">
+                            {{category.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Tên sản phẩm</mat-label>
+                    <mat-select formControlName="product" (selectionChange)="getProductDetails($event.value)">
+                        <mat-option *ngFor="let product of products" [value]="product">
+                            {{product.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Giá</mat-label>
+                    <input matInput formControlName="price" required readonly>
+                    <mat-error *ngIf="billForm.controls.price.touched && billForm.controls.price.invalid">
+                        <span *ngIf="billForm.controls.price.errors.required">Không được để trống giá </span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Số lượng</mat-label>
+                    <input matInput formControlName="quantity" required (keyup)="setQuantity($event)">
+                    <mat-error *ngIf="billForm.controls.quantity.touched && billForm.controls.quantity.invalid">
+                        <span *ngIf="billForm.controls.quantity.errors.required">Không được để trống số lượng </span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Tổng cộng</mat-label>
+                    <input matInput formControlName="total" required>
+                    <mat-error *ngIf="billForm.controls.total.touched && billForm.controls.total.invalid">
+                        <span *ngIf="billForm.controls.total.errors.required">Không được để trống tổng tiền </span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <div>
+        <button mat-flat-button color="primary" [disabled]="validateProductAdd()" (click)="add()">Thêm mới</button>
+        <button mat-flat-button color="primary" class="float-right">
+            <mat-icon>monetization_on</mat-icon> Tổng thành tiền: {{totalAmount}}
+        </button>
+    </div>
+</mat-card>
+<hr>
+
+<div class="responsive_table">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-28">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Tên</th>
+            <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Danh mục</th>
+            <td mat-cell *matCellDef="let element">{{element.category}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Giá</th>
+            <td mat-cell *matCellDef="let element">{{element.price}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Số lượng</th>
+            <td mat-cell *matCellDef="let element">{{element.quantity}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Tổng cộng</th>
+            <td mat-cell *matCellDef="let element">{{element.total}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>Xóa</th>
+            <td mat-cell *matCellDef="let element; let i = index" class="action-link">
+                <button mat-icon-button color="primary" matTooltip="Sửa" (click)="handleDeleteAction(i,element)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+        <tr mat-row *matRowDef="let row; columns:displayedColumns;"></tr>
+    </table>
+</div>
+
