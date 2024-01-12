@@ -4,6 +4,7 @@ import { BillComponent } from './bill/bill.component';
 import { CategoryComponent } from './category/category.component';
 import { ProductComponent } from './product/product.component';
 import { ViewBillComponent } from './view-bill/view-bill.component';
+import { UserComponent } from './user/user.component';
 
 
 export const MaterialRoutes: Routes = [
@@ -37,6 +38,14 @@ export const MaterialRoutes: Routes = [
         canActivate: [RouteGuardService],
         data: {
             expectedRole: ['admin','user']
+        }
+    },
+    {
+        path: 'user',
+        component: UserComponent,
+        canActivate: [RouteGuardService],
+        data: {
+            expectedRole: ['admin']
         }
     }
 ];

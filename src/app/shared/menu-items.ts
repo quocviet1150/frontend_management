@@ -23,6 +23,12 @@ const MENUITEMS = [
     },
     {
         state: 'bill', name: 'Quản lý đơn đặt hàng', type: 'link', icon: 'backup_table', role: ''
+    },
+    {
+        state: 'user', name: 'Quản lý người dùng', type: 'link', icon: 'people', role: ''
+    },
+    {
+        state: 'home', name: 'Quản lý dũ liệu', type: 'link', icon: 'home', role: ''
     }
 ]
 

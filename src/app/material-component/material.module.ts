@@ -18,6 +18,7 @@ import { ProductComponent } from './product/product.component';
 import { DialogProductComponent } from './dialog/dialog-product/dialog-product.component';
 import { BillComponent } from './bill/bill.component';
 import { ViewBillComponent } from './view-bill/view-bill.component';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { ViewBillComponent } from './view-bill/view-bill.component';
     ProductComponent,
     DialogProductComponent,
     BillComponent,
-    ViewBillComponent
+    ViewBillComponent,
+    UserComponent
   ]
 })
 export class MaterialComponentsModule {}
