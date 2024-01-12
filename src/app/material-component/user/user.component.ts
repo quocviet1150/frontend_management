@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
+import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
 
 @Component({
   selector: 'app-user',
@@ -16,7 +18,8 @@ export class UserComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +57,35 @@ export class UserComponent implements OnInit {
 
     }, (error: any) => {
       console.log(error.error?.message);
+      if (error.error?.message) {
+        this.responseMessage = error.error?.message;
+      } else {
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
+    })
+  }
+
+  handleDelete(values: any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      message: ' xóa người dùng ' + values.name,
+      confirmation: true
+    };
+    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
+    const sub = dialogRef.componentInstance.onEmitstatusChange.subscribe((response) => {
+      this.deleteUser(values.id);
+      dialogRef.close();
+    })
+  }
+
+  deleteUser(id: any) {
+    this.userService.delete(id).subscribe((response: any) => {
+      this.tableData();
+      this.responseMessage = response?.message;
+      this.snackbarService.openSnackbar(this.responseMessage, 'success')
+    }, (error: any) => {
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {

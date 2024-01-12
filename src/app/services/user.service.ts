@@ -41,4 +41,16 @@ export class UserService {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     })
   }
+
+  delete(id: any) {
+    return this.httpClient.post(this.url + "/user/delete_user/" + id, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    })
+  }
+
+  updateRole(data: any) {
+    return this.httpClient.post(this.url + "/user/update_decentralization", data, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    })
+  }
 }
