@@ -5,6 +5,8 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
+import { DialogUserComponent } from '../dialog/dialog-user/dialog-user.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -13,13 +15,14 @@ import { ConfirmationComponent } from '../dialog/confirmation/confirmation.compo
 })
 export class UserComponent implements OnInit {
   displayedColumns: string[] = ['name', 'userName', 'contactNumber', 'status'];
-  dataSource: any=[];
+  dataSource: any = [];
   responseMessage: any;
 
   constructor(
     private userService: UserService,
     private snackbarService: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -93,6 +96,24 @@ export class UserComponent implements OnInit {
       }
       this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
     })
+  }
+
+  handleEdit(values: any) {
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Chỉnh sửa quyền người dùng',
+      data: values
+    };
+    dialogConfig.width = "550px";
+    const dialogRef = this.dialog.open(DialogUserComponent, dialogConfig);
+    this.router.events.subscribe(() => {
+      dialogRef.close();
+    });
+    const sub = dialogRef.componentInstance.onEdit.subscribe((response) => {
+      this.tableData();
+    })
+
   }
 
 }

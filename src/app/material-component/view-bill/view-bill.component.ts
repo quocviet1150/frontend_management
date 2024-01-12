@@ -34,7 +34,6 @@ export class ViewBillComponent implements OnInit {
   }
 
   tableData() {
-    debugger
     this.billService.getBill().subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {

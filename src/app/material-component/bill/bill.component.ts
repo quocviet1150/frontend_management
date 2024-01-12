@@ -164,7 +164,6 @@ export class BillComponent implements OnInit {
       totalAmount: this.totalAmount.toString(),
       productDetails: JSON.stringify(this.dataSource)
     }
-    debugger
     this.billService.generateReport(data).subscribe((response: any) => {
       this.downloadFile(response?.uuid);
       this.billForm.reset();

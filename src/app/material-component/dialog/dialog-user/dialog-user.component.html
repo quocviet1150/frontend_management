@@ -1,0 +1,40 @@
+<mat-toolbar style="background-color: darkturquoise;">
+    <mat-toolbar-row fxLayout="row">
+        <span style="color: red;">{{dialogData.action}} người dùng</span>
+        <span class="spacer"></span>
+        <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+            <mat-icon style="color: red;">close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="userForm">
+        <div fxFlex fxLayout="column">
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Quyền người dùng</mat-label>
+                    <mat-select formControlName="role" required>
+                        <mat-option value="admin">admin</mat-option>
+                        <mat-option value="user">user</mat-option>
+                    </mat-select>
+
+                    <mat-error *ngIf="userForm.controls.role.touched && userForm.controls.role.invalid">
+                        <span *ngIf="userForm.controls.role.errors.required">Không được để trống quyền người dùng</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">
+        <mat-icon>save</mat-icon>Xác nhận
+    </button>
+
+    <button mat-raised-button style="background-color: red;" mat-dialog-close>
+        <mat-icon>cancel</mat-icon>Hủy
+    </button>
+
+</mat-dialog-actions>

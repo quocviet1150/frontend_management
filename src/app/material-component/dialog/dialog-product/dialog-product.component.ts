@@ -37,7 +37,7 @@ export class DialogProductComponent implements OnInit {
     });
     if (this.dialogData.action === 'Chỉnh sửa') {
       this.dialogAction = 'Chỉnh sửa';
-      this.action = "Update"
+      this.action = "Chỉnh sửa"
       this.productForm.patchValue(this.dialogData.data);
     }
     this.getCategorys();
