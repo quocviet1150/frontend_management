@@ -20,6 +20,7 @@ import { BillComponent } from './bill/bill.component';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { UserComponent } from './user/user.component';
 import { DialogUserComponent } from './dialog/dialog-user/dialog-user.component';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { DialogUserComponent } from './dialog/dialog-user/dialog-user.component'
     BillComponent,
     ViewBillComponent,
     UserComponent,
-    DialogUserComponent
+    DialogUserComponent,
+    UploadImageComponent
   ]
 })
 export class MaterialComponentsModule {}

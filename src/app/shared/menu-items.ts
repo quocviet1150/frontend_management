@@ -28,7 +28,7 @@ const MENUITEMS = [
         state: 'user', name: 'Quản lý người dùng', type: 'link', icon: 'people', role: 'admin'
     },
     {
-        state: 'home', name: 'Quản lý dũ liệu', type: 'link', icon: 'home', role: 'admin'
+        state: 'image', name: 'Quản lý dũ liệu', type: 'link', icon: 'image', role: 'admin'
     }
 ]
 

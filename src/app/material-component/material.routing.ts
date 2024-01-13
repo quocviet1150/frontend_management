@@ -5,6 +5,7 @@ import { CategoryComponent } from './category/category.component';
 import { ProductComponent } from './product/product.component';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { UserComponent } from './user/user.component';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 
 
 export const MaterialRoutes: Routes = [
@@ -43,6 +44,14 @@ export const MaterialRoutes: Routes = [
     {
         path: 'user',
         component: UserComponent,
+        canActivate: [RouteGuardService],
+        data: {
+            expectedRole: ['admin']
+        }
+    },
+    {
+        path: 'image',
+        component: UploadImageComponent,
         canActivate: [RouteGuardService],
         data: {
             expectedRole: ['admin']
