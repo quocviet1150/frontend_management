@@ -5,7 +5,7 @@ import { CategoryComponent } from './category/category.component';
 import { ProductComponent } from './product/product.component';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { UserComponent } from './user/user.component';
-import { UploadImageComponent } from './upload-image/upload-image.component';
+import { UploadImageComponent } from './dialog/upload-image/upload-image.component';
 
 
 export const MaterialRoutes: Routes = [
