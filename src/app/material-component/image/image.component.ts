@@ -10,7 +10,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 })
 export class ImageComponent implements OnInit {
 
-  imageDatas: any[] | undefined;
+  imageData: any[] | undefined;
   responseMessage: any;
 
   constructor(
@@ -24,7 +24,7 @@ export class ImageComponent implements OnInit {
 
   getImage() {
     this.imageService.getImageData().subscribe((response: any) => {
-      this.imageDatas = response;
+      this.imageData = response;
     }, (error: any) => {
       console.log(error.error?.message);
       if (error.error?.message) {
