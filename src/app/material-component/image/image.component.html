@@ -1,0 +1,8 @@
+<div *ngFor="let image of imageDatas">
+    <h2>{{ image.name }}</h2>
+    <p>{{ image.description }}</p>
+    <img [src]="image.file" alt="{{ image.fileName }}">
+</div>
+
+
+test
