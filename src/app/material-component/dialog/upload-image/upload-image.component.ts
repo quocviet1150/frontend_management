@@ -77,16 +77,13 @@ export class UploadImageComponent implements OnInit {
         }
       );
     } else {
-      // Handle the case where 'file' is null
-      console.error("File is null");
-      // Perform additional actions or show a specific error message
+      this.responseMessage = GlobalConstants.FileZeroError;
     }
   }
 
   deleteImage(): void {
-    // Thực hiện các hành động cần thiết để xóa ảnh
-    this.selectedImage = null; // Đặt giá trị của ảnh về null
-    this.fileName = null; // Đặt giá trị của tên file về null hoặc giá trị mặc định khác
+    this.selectedImage = null; 
+    this.fileName = null; 
 
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {

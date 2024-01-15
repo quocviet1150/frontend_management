@@ -10,7 +10,7 @@
 
 <mat-dialog-content class="mat-typography" style="width: 100%;">
   <div class="text-center" style="display: grid; width: 20%;">
-    <input class="form-control" type="file" (change)="onFileChange($event)">
+    <input class="form-control" type="file" (change)="onFileChange($event)" accept=".png, .jpg, .jpeg">
     <div *ngIf="selectedImage" class="img-container">
         <img [src]="selectedImage" class="img-preview" alt="Selected Image">
         <button (click)="deleteImage()" class="delete-button">X</button>
