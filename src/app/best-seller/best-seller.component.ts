@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { GlobalConstants } from '../shared/global-constants';
 import { UploadImageService } from '../services/upload-image.service';
 import { SnackbarService } from '../services/snackbar.service';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-best-seller',
@@ -16,6 +17,8 @@ export class BestSellerComponent implements OnInit {
   constructor(
     private imageService: UploadImageService,
     private snackbarService: SnackbarService,
+    private renderer: Renderer2, 
+    private el: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +40,18 @@ export class BestSellerComponent implements OnInit {
     }
     );
   }
-  
+
+  openImageModal(base64Image: string): void {
+    const modalImage = this.el.nativeElement.querySelector('#modalImage');
+    this.renderer.setAttribute(modalImage, 'src', 'data:image/jpg;base64,' + base64Image);
+
+    // Set the width and height of the image (for example, 800px x 600px)
+    this.renderer.setStyle(modalImage, 'width', '500px');
+    this.renderer.setStyle(modalImage, 'height', '500px');
+
+    // Open the modal
+    const modal = new bootstrap.Modal(this.el.nativeElement.querySelector('#imageModal'));
+    modal.show();
+  }
 
 }

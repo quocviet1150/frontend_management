@@ -4,20 +4,34 @@
             <h2 class="section-heading text-uppercase">Gian hàng của tôi</h2>
         </div>
         <ul class="timeline">
-            <li *ngFor="let image of imageData;let i = index" [ngClass]="{'': i % 2 === 0, 'timeline-inverted': i % 2 !== 0}">
-                <a href="imagePath" target="_blank">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" [src]="'data:image/jpg;base64,' + image.file"
-                            alt="..." /></div>
-                </a>
+
+            <li *ngFor="let image of imageData;let i = index"
+                [ngClass]="{'': i % 2 === 0, 'timeline-inverted': i % 2 !== 0}">
+                <button class="btn btn-link" (click)="openImageModal(image.file)">
+                    <div class="timeline-image"><img class="rounded-circle img-fluid"
+                            [src]="'data:image/jpg;base64,' + image.file" alt="..." /></div>
+                </button>
                 <div class="timeline-panel">
                     <div class="timeline-heading">
-                        <h4>Wake Up 247</h4>
+                        <h4>{{ image.name }}</h4>
                     </div>
                     <div class="timeline-body">
                         <p class="text-muted">{{ image.description }}</p>
                     </div>
                 </div>
             </li>
+
+            <!-- Modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <img id="modalImage" class="img-fluid rounded-circle" alt="Modal Image">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- <li class="timeline-inverted">
                 <a href="../../assets/img/2.jpg" target="_blank">
                     <div class="timeline-image"><img class="rounded-circle img-fluid" src="../../assets/img/2.jpg"

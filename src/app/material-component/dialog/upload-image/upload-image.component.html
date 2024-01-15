@@ -8,11 +8,15 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<mat-dialog-content class="mat-typography">
-  <div class="text-center">
+<mat-dialog-content class="mat-typography" style="width: 100%;">
+  <div class="text-center" style="display: grid; width: 20%;">
     <input class="form-control" type="file" (change)="onFileChange($event)">
-    <!-- <img *ngIf="imageUrl" [src]="imageUrl" alt="Preview"> -->
-  </div>
+    <div *ngIf="selectedImage" class="img-container">
+        <img [src]="selectedImage" class="img-preview" alt="Selected Image">
+        <button (click)="deleteImage()" class="delete-button">X</button>
+    </div>
+    <div *ngIf="selectedImage" class="file-name" [ngClass]="{'tooltip': fileName && fileName.length > 10}" [title]="fileName"></div>
+</div>
   <div fxFlex fxLayout="column">
     <div fxLayout="row wrap">
       <mat-form-field appearance="standard" fxFlex>

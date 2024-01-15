@@ -15,10 +15,12 @@ export class UploadImageComponent implements OnInit {
   name: string = '';
   description: string = '';
   file: File | null = null;
+  fileName: string | null = null;
   productForm: any = FormGroup;
   shortLink: string = "";
   responseMessage: any;
   onAddImage = new EventEmitter();
+  selectedImage: string | ArrayBuffer | null = null;
 
   constructor(private imageService: UploadImageService,
     private formBuilder: FormBuilder,
@@ -30,7 +32,26 @@ export class UploadImageComponent implements OnInit {
   }
 
   onFileChange(event: any): void {
-    this.file = event.target.files[0];
+    const file = event.target.files[0];
+
+    if (file) {
+      this.readAndPreviewImage(file);
+    } else {
+      this.file = null;
+      this.selectedImage = null;
+    }
+  }
+
+  readAndPreviewImage(file: File): void {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        this.selectedImage = e.target.result;
+        this.file = file;
+        this.fileName = file.name;
+      }
+    };
+    reader.readAsDataURL(file);
   }
 
 
@@ -61,4 +82,15 @@ export class UploadImageComponent implements OnInit {
       // Perform additional actions or show a specific error message
     }
   }
+
+  deleteImage(): void {
+    // Thực hiện các hành động cần thiết để xóa ảnh
+    this.selectedImage = null; // Đặt giá trị của ảnh về null
+    this.fileName = null; // Đặt giá trị của tên file về null hoặc giá trị mặc định khác
+
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+        fileInput.value = ''; 
+    }
+}
 }
