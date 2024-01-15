@@ -1,0 +1,53 @@
+td img {
+    max-width: 100px;
+    max-height: 50px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+    border-radius: 20%;
+}
+
+td img:hover {
+    transform: scale(1.1);
+    /* Khi hover, phóng to hình ảnh */
+}
+
+.name {
+    width: 20%;
+    height: 50px;
+    padding: 1%;
+    text-align: center;
+}
+
+.image {
+    width: 5%;
+    height: 50px;
+}
+
+.description {
+    width: 60%;
+    height: 50px;
+    padding-left: 3%;
+    padding-right: 1%;
+    
+}
+
+.action {
+    width: 15%;
+    height: 50px;
+}
+
+mat-form-field {
+    padding: 5px;
+}
+
+.float-right {
+    float: right;
+}
+
+table {
+    width: 100%;
+}
+
+mat-card {
+    padding-bottom: 30px !important;
+}

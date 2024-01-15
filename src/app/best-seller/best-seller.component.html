@@ -4,8 +4,9 @@
             <h2 class="section-heading text-uppercase">Gian hàng của tôi</h2>
         </div>
         <ul class="timeline">
-            <li><a href="../../assets/img/1.png" target="_blank">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="../../assets/img/1.png"
+            <li *ngFor="let image of imageData;let i = index" [ngClass]="{'': i % 2 === 0, 'timeline-inverted': i % 2 !== 0}">
+                <a href="imagePath" target="_blank">
+                    <div class="timeline-image"><img class="rounded-circle img-fluid" [src]="'data:image/jpg;base64,' + image.file"
                             alt="..." /></div>
                 </a>
                 <div class="timeline-panel">
@@ -13,13 +14,11 @@
                         <h4>Wake Up 247</h4>
                     </div>
                     <div class="timeline-body">
-                        <p class="text-muted">Nước tăng lực Wake Up 247 vị cà phê 330ml có mùi vị thơm
-                            ngon, sảng khoái cùng hương cà phê thơm dễ chịu. Sản phẩm nước uống tăng lực chính hãng từ
-                            thương hiệu Wake up 247</p>
+                        <p class="text-muted">{{ image.description }}</p>
                     </div>
                 </div>
             </li>
-            <li class="timeline-inverted">
+            <!-- <li class="timeline-inverted">
                 <a href="../../assets/img/2.jpg" target="_blank">
                     <div class="timeline-image"><img class="rounded-circle img-fluid" src="../../assets/img/2.jpg"
                             alt="..." /></div>
@@ -66,7 +65,7 @@
                             and it is also known as chocolate moelleux, chocolate lava cake, or simply lava cake.</p>
                     </div>
                 </div>
-            </li>
+            </li> -->
             <li class="timeline-inverted">
                 <div class="timeline-image">
                     <h4>
