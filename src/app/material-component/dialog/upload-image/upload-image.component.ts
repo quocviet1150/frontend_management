@@ -82,12 +82,12 @@ export class UploadImageComponent implements OnInit {
   }
 
   deleteImage(): void {
-    this.selectedImage = null; 
-    this.fileName = null; 
+    this.selectedImage = null;
+    this.fileName = null;
 
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
-        fileInput.value = ''; 
+      fileInput.value = '';
     }
-}
+  }
 }

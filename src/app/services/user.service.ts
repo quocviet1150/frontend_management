@@ -36,6 +36,11 @@ export class UserService {
     return this.httpClient.get(this.url + "/user/get");
   }
 
+
+  getUserLogin() {
+    return this.httpClient.get(this.url + "/user/get_detail_login");
+  }
+
   update(data: any) {
     return this.httpClient.post(this.url + "/user/update", data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
