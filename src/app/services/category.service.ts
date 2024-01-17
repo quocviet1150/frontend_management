@@ -30,4 +30,10 @@ export class CategoryService {
     return this.httpClient.get(this.url + "/category/get_category?filterValue=true");
   }
 
+  update(data: any) {
+    return this.httpClient.post(this.url + "/category/update", data, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    })
+  }
+
 }

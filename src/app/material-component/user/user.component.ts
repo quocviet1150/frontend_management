@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'userName', 'contactNumber', 'status'];
+  displayedColumns: string[] = ['name', 'userName', 'contactNumber', 'role', 'status'];
   dataSource: any = [];
   responseMessage: any;
 
