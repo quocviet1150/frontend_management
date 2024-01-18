@@ -17,7 +17,8 @@ export class AppHeaderComponent {
   user: any = [];
   role: any;
   responseMessage: any;
-  
+  private logoutTimer: any;
+
   constructor(
     private router: Router,
     private dialog: MatDialog,
@@ -25,21 +26,24 @@ export class AppHeaderComponent {
     private snackbarService: SnackbarService,
   ) {
     this.getUserLogin();
+    this.startLogoutTimer();
   }
-  logout() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "400px";
-    dialogConfig.data = {
-      message: 'đăng xuất không',
-      confirmation: true
-    };
 
-    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    const sub = dialogRef.componentInstance.onEmitstatusChange.subscribe((response) => {
-      dialogRef.close();
+  private startLogoutTimer() {
+    const logoutTimeInMilliseconds = 2 * 60 *60 * 1000;
+    this.logoutTimer = setTimeout(() => {
       localStorage.clear();
       this.router.navigate(['/']);
-    })
+    }, logoutTimeInMilliseconds);
+  }
+  private resetLogoutTimer() {
+    clearTimeout(this.logoutTimer);
+    this.startLogoutTimer();
+  }
+
+
+  onUserActivity() {
+    this.resetLogoutTimer();
   }
 
 
@@ -54,11 +58,11 @@ export class AppHeaderComponent {
     debugger
     this.userService.getUserLogin().subscribe((response: any) => {
       this.user = response;
-      console.log(this.user,response,"test");
-      
+      console.log(this.user, response, "test");
+
     }, (error) => {
       console.log(error);
-      
+
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -66,5 +70,21 @@ export class AppHeaderComponent {
       }
       this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
     })
-}
+  }
+
+  logout() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "400px";
+    dialogConfig.data = {
+      message: 'Đăng xuất không?',
+      confirmation: true
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
+    const sub = dialogRef.componentInstance.onEmitstatusChange.subscribe((response) => {
+      dialogRef.close();
+      localStorage.clear();
+      this.router.navigate(['/']);
+    })
+  }
 }
