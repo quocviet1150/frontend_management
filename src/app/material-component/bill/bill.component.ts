@@ -142,7 +142,7 @@ export class BillComponent implements OnInit {
         total: +formData.total
       })
       this.dataSource = [...this.dataSource];
-      this.snackbarService.openSnackbar(GlobalConstants.ProductAdded, "success");
+      this.snackbarService.openSnackbar(GlobalConstants.productAdded, "success");
     } else {
       this.snackbarService.openSnackbar(GlobalConstants.productExistError, GlobalConstants.error);
     }
@@ -191,4 +191,5 @@ export class BillComponent implements OnInit {
       saveAs(response, fileName + '.pdf');
     })
   }
+  
 }
