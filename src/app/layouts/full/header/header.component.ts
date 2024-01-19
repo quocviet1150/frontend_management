@@ -26,20 +26,22 @@ export class AppHeaderComponent {
     private snackbarService: SnackbarService,
   ) {
     this.getUserLogin();
-    this.startLogoutTimer();
+    if (this.userIsLoggedIn()) {
+      this.startLogoutTimer();
+    }
   }
 
   private startLogoutTimer() {
-    const logoutTimeInMilliseconds = 2 * 60 *60 * 1000;
+    const logoutTimeInMilliseconds = 2 * 60 * 60 * 1000;
     this.logoutTimer = setTimeout(() => {
       localStorage.clear();
       this.router.navigate(['/']);
     }, logoutTimeInMilliseconds);
   }
-  private resetLogoutTimer() {
-    clearTimeout(this.logoutTimer);
-    this.startLogoutTimer();
-  }
+  // private resetLogoutTimer() {
+  //   clearTimeout(this.logoutTimer);
+  //   this.startLogoutTimer();
+  // }
 
 
   onUserActivity() {
@@ -58,11 +60,8 @@ export class AppHeaderComponent {
     debugger
     this.userService.getUserLogin().subscribe((response: any) => {
       this.user = response;
-      console.log(this.user, response, "test");
-
     }, (error) => {
       console.log(error);
-
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -86,5 +85,16 @@ export class AppHeaderComponent {
       localStorage.clear();
       this.router.navigate(['/']);
     })
+  }
+
+  userIsLoggedIn(): boolean {
+    return true;
+  }
+
+  resetLogoutTimer() {
+    clearTimeout(this.logoutTimer);
+    if (this.userIsLoggedIn()) {
+      this.startLogoutTimer();
+    }
   }
 }
