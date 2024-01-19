@@ -9,6 +9,10 @@
 </div>
 
 <mat-menu #profile="matMenu" class="mymegamenu">
+    <button mat-menu-item (click)="logout()">
+        <mat-icon>edit_location</mat-icon>Chỉnh sửa thông tin cá nhân 
+    </button>
+
     <button mat-menu-item (click)="changePassword()">
         <mat-icon>password</mat-icon>Đổi mật khẩu
     </button>
@@ -16,6 +20,7 @@
     <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>Đăng xuất
     </button>
+
     <mat-option *ngFor="let user">
         {{user.name}}
     </mat-option>

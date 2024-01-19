@@ -8,13 +8,14 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { DialogProductComponent } from '../dialog/dialog-product/dialog-product.component';
 import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
 
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'categoryName', 'description', 'price', 'edit']
+  displayedColumns: string[] = ['name', 'categoryName', 'description','createdDate', 'price', 'edit']
   dataSource: any;
   responseMessage: any;
   length1: any;
@@ -31,6 +32,13 @@ export class ProductComponent implements OnInit {
 
   tableData() {
     this.productService.getProducts().subscribe((response: any) => {
+
+      response.forEach((product: any) => {
+        const createdDate = new Date(product.createdDate);
+        const formattedDate = this.formatDate(createdDate);
+        product.createdDate = formattedDate;
+      });
+
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
       console.log(error.error?.message);
@@ -129,6 +137,17 @@ export class ProductComponent implements OnInit {
       }
       this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
     })
+  }
+
+  formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
 }
