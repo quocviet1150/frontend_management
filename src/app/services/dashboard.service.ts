@@ -15,4 +15,8 @@ export class DashboardService {
   getDetails(){
     return this.httpClient.get(this.url + "/dashboard/details")
   }
+
+  getDetail(){
+    return this.httpClient.get(this.url + "/dashboard/detail")
+  }
 }

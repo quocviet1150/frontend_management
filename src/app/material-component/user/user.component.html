@@ -30,6 +30,11 @@
             <td mat-cell *matCellDef="let element">{{element.contactNumber}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="createdDate">
+            <th mat-header-cell *matHeaderCellDef>Ngày đăng kí</th>
+            <td mat-cell *matCellDef="let element">{{element.createdDate}}</td>
+        </ng-container>
+
         <ng-container matColumnDef="role">
             <th mat-header-cell *matHeaderCellDef>Quyền</th>
             <td mat-cell *matCellDef="let element">{{element.role}}</td>

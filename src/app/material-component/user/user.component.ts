@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'userName', 'contactNumber', 'role', 'status'];
+  displayedColumns: string[] = ['name', 'userName', 'contactNumber','createdDate', 'role', 'status'];
   dataSource: any = [];
   responseMessage: any;
 
@@ -31,6 +31,11 @@ export class UserComponent implements OnInit {
 
   tableData() {
     this.userService.getUsers().subscribe((response: any) => {
+      response.forEach((user: any) => {
+        const createdDate = new Date(user.createdDate);
+        const formattedDate = this.formatDate(createdDate);
+        user.createdDate = formattedDate;
+      });
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
       console.log(error.error?.message);
@@ -116,4 +121,14 @@ export class UserComponent implements OnInit {
 
   }
 
+  formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  }
 }

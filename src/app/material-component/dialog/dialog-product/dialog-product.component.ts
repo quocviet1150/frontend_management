@@ -49,7 +49,7 @@ export class DialogProductComponent implements OnInit {
   }
 
   getCategory() {
-    this.categoryService.getCategoryStatus().subscribe((response: any) => {
+    this.categoryService.getCategorys().subscribe((response: any) => {
       this.categorys = response;
     }, (error) => {
       this.dialogRef.close();

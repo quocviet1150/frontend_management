@@ -11,9 +11,12 @@ export interface Menu {
 const MENUITEMS = [
     {
         state: 'dashboard', name: 'Trang chủ', type: 'link', icon: 'dashboard', role: ''
+    }, 
+    {
+        state: 'home', name: 'Trang thống kê', type: 'link', icon: 'dashboard', role: 'admin'
     },
     {
-        state: 'category', name: 'Danh mục', type: 'link', icon: 'category', role: 'admin'
+        state: 'category', name: 'Danh mục sản phẩm', type: 'link', icon: 'category', role: 'admin'
     },
     {
         state: 'product', name: 'Sản phẩm', type: 'link', icon: 'inventory_2', role: 'admin'
@@ -22,7 +25,7 @@ const MENUITEMS = [
         state: 'order', name: 'Quản lý đơn đặt hàng', type: 'link', icon: 'shopping_cart', role: ''
     },
     {
-        state: 'bill', name: 'Quản lý đơn đặt hàng', type: 'link', icon: 'backup_table', role: 'admin'
+        state: 'bill', name: 'Quản lý hóa đơn', type: 'link', icon: 'backup_table', role: 'admin'
     },
     {
         state: 'user', name: 'Quản lý người dùng', type: 'link', icon: 'people', role: 'admin'
