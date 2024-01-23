@@ -77,4 +77,25 @@ export class CategoryComponent implements OnInit {
       this.tableData();
     })
   }
+
+  onChange(status: any, id: any) {
+    var data = {
+      status: status.toString(),
+      id: id
+    }
+
+    this.categoryService.update(data).subscribe((response: any) => {
+      this.responseMessage = response?.message;
+      this.snackbarService.openSnackbar(this.responseMessage, "success");
+
+    }, (error: any) => {
+      console.log(error.error?.message);
+      if (error.error?.message) {
+        this.responseMessage = error.error?.message;
+      } else {
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
+    })
+  }
 }

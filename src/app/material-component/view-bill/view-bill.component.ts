@@ -17,7 +17,7 @@ import { saveAs } from 'file-saver';
 })
 export class ViewBillComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'email', 'contactNumber', 'paymentMethod', 'total', 'view'];
+  displayedColumns: string[] = ['name', 'email', 'contactNumber','createdDate', 'paymentMethod', 'total', 'view'];
   dataSource: any = [];
   responseMessage: any;
 
@@ -35,6 +35,11 @@ export class ViewBillComponent implements OnInit {
 
   tableData() {
     this.billService.getBill().subscribe((response: any) => {
+      response.forEach((bill: any) => {
+        const createdDate = new Date(bill.createdDate);
+        const formattedDate = this.formatDate(createdDate);
+        bill.createdDate = formattedDate;
+      });
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
       console.log(error.error?.message);
@@ -112,4 +117,16 @@ export class ViewBillComponent implements OnInit {
       saveAs(response, fileName + '.pdf');
     })
   }
+
+  formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  }
+
 }

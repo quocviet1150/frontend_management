@@ -40,7 +40,27 @@ export class DialogProductComponent implements OnInit {
       this.action = "Chỉnh sửa"
       this.productForm.patchValue(this.dialogData.data);
     }
-    this.getCategorys();
+    if (this.dialogAction === 'Chỉnh sửa') {
+      this.getCategorys();
+    } else {
+      this.getCategory();
+    }
+    
+  }
+
+  getCategory() {
+    this.categoryService.getCategorys().subscribe((response: any) => {
+      this.categorys = response;
+    }, (error) => {
+      this.dialogRef.close();
+      console.log(error);
+      if (error.error?.message) {
+        this.responseMessage = error.error?.message;
+      } else {
+        this.responseMessage = GlobalConstants.genericError;
+      }
+      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
+    })
   }
 
   getCategorys() {

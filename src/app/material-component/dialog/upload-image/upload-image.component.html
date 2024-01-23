@@ -1,14 +1,24 @@
-<button mat-flat-button color="primary" (click)="uploadImage()" class="float-right">
-  Thêm mới</button>
+<mat-toolbar style="background-color: darkturquoise;">
+  <mat-toolbar-row fxLayout="row">
+    <span style="color: red;">Thêm mới hình ảnh</span>
+    <span class="spacer"></span>
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+      <mat-icon style="color: red;">close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-<div class="text-center">
-  <input class="form-control" type="file" (change)="onFileChange($event)">
+<mat-dialog-content class="mat-typography" style="width: 100%;">
+  <div class="text-center" style="display: grid; width: 20%;">
+    <input class="form-control" type="file" (change)="onFileChange($event)" accept=".png, .jpg, .jpeg">
+    <div *ngIf="selectedImage" class="img-container">
+        <img [src]="selectedImage" class="img-preview" alt="Selected Image">
+        <button (click)="deleteImage()" class="delete-button">X</button>
+    </div>
+    <div *ngIf="selectedImage" class="file-name" [ngClass]="{'tooltip': fileName && fileName.length > 10}" [title]="fileName"></div>
 </div>
-
-<mat-dialog-content class="mat-typography">
   <div fxFlex fxLayout="column">
     <div fxLayout="row wrap">
-
       <mat-form-field appearance="standard" fxFlex>
         <mat-label>Tên sản phẩm</mat-label>
         <input matInput [(ngModel)]="name" #nameInput="ngModel" name="name" required maxlength="50">
@@ -43,3 +53,13 @@
     </div>
   </div>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" (click)="uploadImage()" class="float-right">
+    <mat-icon>save</mat-icon> Xác nhận</button>
+
+  <button mat-raised-button style="background-color: red;" mat-dialog-close>
+    <mat-icon>cancel</mat-icon>Hủy
+  </button>
+
+</mat-dialog-actions>

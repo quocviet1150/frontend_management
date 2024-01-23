@@ -22,7 +22,7 @@ export class DashboardComponent implements AfterViewInit {
 	}
 
 	dashboardData() {
-		this.dashboardService.getDetail().subscribe((response: any) => {
+		this.dashboardService.getDetails().subscribe((response: any) => {
 			this.data = response;
 		}, (error: any) => {
 			console.log(error);

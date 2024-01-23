@@ -1,7 +1,18 @@
-<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+<div style="display: flex; justify-content: center; align-items: center;">
+    <div *ngIf="user" style="margin-right: 10px;">
+        {{user.name}}
+    </div>
     <mat-icon>account_circle</mat-icon>
-</button>
+    <button mat-icon-button class="m-r-5" style="cursor: pointer;">
+    <mat-icon [matMenuTriggerFor]="profile" style="margin-right: 10px;">touch_app</mat-icon>
+    </button>
+</div>
+
 <mat-menu #profile="matMenu" class="mymegamenu">
+    <button mat-menu-item (click)="logout()">
+        <mat-icon>edit_location</mat-icon>Chỉnh sửa thông tin cá nhân 
+    </button>
+
     <button mat-menu-item (click)="changePassword()">
         <mat-icon>password</mat-icon>Đổi mật khẩu
     </button>
@@ -9,4 +20,8 @@
     <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>Đăng xuất
     </button>
+
+    <mat-option *ngFor="let user">
+        {{user.name}}
+    </mat-option>
 </mat-menu>

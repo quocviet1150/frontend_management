@@ -1,5 +1,5 @@
 <mat-card>
-    <b><span>Quản lý danh mục</span></b>
+    <b><span>Quản lý danh mục sản phẩm</span></b>
     <button mat-flat-button color="primary" class="float-right" (click)="handleAdd()">
         <mat-icon>
             add_circle
@@ -26,6 +26,8 @@
                 <button mat-icon-button color="primary" matTooltip="Sửa" (click)="handleEdit(element)">
                     <mat-icon>edit</mat-icon>
                 </button>
+                <mat-slide-toggle (change)="onChange($event.checked,element.id)" matTooltip="Còn hàng hoặc không còn hàng"
+                    [checked]="element.status"></mat-slide-toggle>
             </td>
         </ng-container>
 

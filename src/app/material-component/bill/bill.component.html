@@ -49,9 +49,9 @@
                     <mat-label>Phương thức thanh toán</mat-label>
                     <mat-select formControlName="paymentMethod" required>
                         <mat-option value=""></mat-option>
-                        <mat-option value="cash">Tiền mặt</mat-option>
-                        <mat-option value="credit card">Thẻ tín dụng</mat-option>
-                        <mat-option value="debit card">Thẻ ghi nợ</mat-option>
+                        <mat-option value="Tiền mặt">Tiền mặt</mat-option>
+                        <mat-option value="Thẻ tín dụng">Thẻ tín dụng</mat-option>
+                        <mat-option value="Thẻ ghi nợ">Thẻ ghi nợ</mat-option>
                     </mat-select>
 
                     <mat-error
@@ -134,7 +134,7 @@
         </ng-container>
 
         <ng-container matColumnDef="category">
-            <th mat-header-cell *matHeaderCellDef>Danh mục</th>
+            <th mat-header-cell *matHeaderCellDef>Danh mục sản phẩm</th>
             <td mat-cell *matCellDef="let element">{{element.category}}</td>
         </ng-container>
 

@@ -1,0 +1,43 @@
+
+<mat-card>
+    <b>
+        <span>Quản lý danh sách sản phẩm màn home</span>
+    </b>
+    <button mat-flat-button color="primary" class="float-right" (click)="handleAdd()">
+        <mat-icon>add_circle</mat-icon> Thêm mới
+    </button>
+</mat-card>
+<hr>
+
+<div class="responsive_table">
+    <table class="mat-elevation-z8" style="width: 100%;background: white;">
+        <thead>
+            <tr >
+                <th class="name">Tên</th>
+                <th class="image">Ảnh</th>
+                <th class="description">Mô tả</th>
+                <th class="action">Tác động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let image of imageData">
+                <td class="name">{{ image.name }}</td>
+                <td class="image">
+                    <img [src]="'data:image/jpg;base64,' + image.file" alt="{{ image.name }}">
+                </td>
+                <td class="description">{{ image.description }}</td>
+
+                <td class="action-link" style="display: flex;flex-direction: row;justify-content: center;">
+
+                    <mat-slide-toggle style="margin-top: 10px;" (change)="onChange($event.checked,image.id)" matTooltip="Đổi trạng thái" 
+                    [checked]="image.status"></mat-slide-toggle>
+
+                    <button mat-icon-button color="primary" matTooltip="Xóa" (click)="handleDelete(image)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

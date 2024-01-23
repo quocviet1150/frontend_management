@@ -1,42 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UserService } from 'src/app/services/user.service';
+import { UploadImageService } from 'src/app/services/upload-image.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
-import { DialogUserComponent } from '../dialog/dialog-user/dialog-user.component';
 import { Router } from '@angular/router';
+import { UploadImageComponent } from '../dialog/upload-image/upload-image.component';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  selector: 'app-image',
+  templateUrl: './image.component.html',
+  styleUrls: ['./image.component.scss']
 })
-export class UserComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'userName', 'contactNumber','createdDate', 'role', 'status'];
-  dataSource: any = [];
+export class ImageComponent implements OnInit {
+
+  imageData: any[] | undefined;
   responseMessage: any;
 
   constructor(
-    private userService: UserService,
+    private imageService: UploadImageService,
     private snackbarService: SnackbarService,
     private dialog: MatDialog,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.tableData();
+    this.getImage();
   }
 
-  tableData() {
-    this.userService.getUsers().subscribe((response: any) => {
-      response.forEach((user: any) => {
-        const createdDate = new Date(user.createdDate);
-        const formattedDate = this.formatDate(createdDate);
-        user.createdDate = formattedDate;
-      });
-      this.dataSource = new MatTableDataSource(response);
+  getImage() {
+    this.imageService.getImageDataAll().subscribe((response: any) => {
+      this.imageData = response;
     }, (error: any) => {
       console.log(error.error?.message);
       if (error.error?.message) {
@@ -45,26 +40,22 @@ export class UserComponent implements OnInit {
         this.responseMessage = GlobalConstants.genericError;
       }
       this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
-    })
-  }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+    );
   }
 
   onChange(status: any, id: any) {
     var data = {
-      status: status.toString(),
+      status: status,
       id: id
     }
 
-    this.userService.update(data).subscribe((response: any) => {
+    this.imageService.updateStatus(data).subscribe((response: any) => {
       this.responseMessage = response?.message;
-      this.snackbarService.openSnackbar(this.responseMessage, "success");
-
+      this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error: any) => {
-      console.log(error.error?.message);
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -77,19 +68,19 @@ export class UserComponent implements OnInit {
   handleDelete(values: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: ' xóa người dùng ' + values.name,
+      message: ' xóa sản phẩm ' + values.name,
       confirmation: true
     };
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onEmitstatusChange.subscribe((response) => {
-      this.deleteUser(values.id);
+      this.deleteProduct(values.id);
       dialogRef.close();
     })
   }
 
-  deleteUser(id: any) {
-    this.userService.delete(id).subscribe((response: any) => {
-      this.tableData();
+  deleteProduct(id: any) {
+    this.imageService.delete(id).subscribe((response: any) => {
+      this.getImage();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, 'success')
     }, (error: any) => {
@@ -103,32 +94,20 @@ export class UserComponent implements OnInit {
     })
   }
 
-  handleEdit(values: any) {
-
+  handleAdd() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Chỉnh sửa quyền người dùng',
-      data: values
+      action: 'Thêm mới'
     };
-    dialogConfig.width = "550px";
-    const dialogRef = this.dialog.open(DialogUserComponent, dialogConfig);
+    dialogConfig.width = "850px";
+    const dialogRef = this.dialog.open(UploadImageComponent, dialogConfig);
     this.router.events.subscribe(() => {
       dialogRef.close();
     });
-    const sub = dialogRef.componentInstance.onEdit.subscribe((response) => {
-      this.tableData();
+    const sub = dialogRef.componentInstance.onAddImage.subscribe((response) => {
+      this.getImage();
     })
 
   }
 
-  formatDate(date: Date): string {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-  
-    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-  }
 }
