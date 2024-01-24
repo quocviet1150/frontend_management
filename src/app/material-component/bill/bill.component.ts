@@ -16,12 +16,13 @@ import { filter } from 'rxjs/operators';
 })
 export class BillComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'category', 'price', 'quantity', 'total', 'edit'];
+  displayedColumns: string[] = ['name', 'category','description', 'price', 'quantity', 'total', 'edit'];
   dataSource: any = [];
   responseMessage: any;
   categorys: any = [];
   products: any = [];
   price: any;
+  description:any;
   totalAmount: number = 0;
   billForm: any = FormGroup;
 
@@ -44,6 +45,7 @@ export class BillComponent implements OnInit {
       product: [null, [Validators.required]],
       category: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
+      description: [null, [Validators.required]],
       price: [null, [Validators.required]],
       total: [0, [Validators.required]],
     })
@@ -76,6 +78,7 @@ export class BillComponent implements OnInit {
     this.productService.getProductsByCategory(value.id).subscribe((response: any) => {
       this.products = response;
       this.billForm.controls['price'].setValue('');
+      this.billForm.controls['description'].setValue('');
       this.billForm.controls['quantity'].setValue('');
       this.billForm.controls['total'].setValue('');
     }, (error: any) => {
@@ -92,8 +95,10 @@ export class BillComponent implements OnInit {
 
   getProductDetails(value: any) {
     this.productService.getProductsById(value.id).subscribe((response: any) => {
+      this.description = response.description;
       this.price = response.price;
       this.billForm.controls['price'].setValue(response.price);
+      this.billForm.controls['description'].setValue(response.description);
       this.billForm.controls['quantity'].setValue("1");
       this.billForm.controls['total'].setValue(this.price * 1);
     }, (error: any) => {
@@ -151,7 +156,8 @@ export class BillComponent implements OnInit {
             id: +formData.product.id,
             name: formData.product.name,
             category: formData.category.name,
-            quantity: originalQuantity, // Sử dụng số lượng trước khi giảm
+            quantity: originalQuantity,
+            description: formData.description,
             price: formData.price,
             total: +formData.total
           });
