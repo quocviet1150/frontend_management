@@ -61,5 +61,9 @@ export class ProductService {
     })
   }
 
+  getDetails(){
+    return this.httpClient.get(this.url + "/product/get_product_by_quantity")
+  }
+
 
 }

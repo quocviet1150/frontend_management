@@ -5,7 +5,7 @@ import { GlobalConstants } from '../shared/global-constants';
 import { HttpClient } from '@angular/common/http';
 @Component({
 	selector: 'app-dashboard',
-	templateUrl: './dashboard.component.html',
+	templateUrl: './dashboard_admin.component.html',
 	styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements AfterViewInit {
