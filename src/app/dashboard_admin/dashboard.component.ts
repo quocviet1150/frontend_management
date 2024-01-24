@@ -31,7 +31,7 @@ export class DashboardComponent implements AfterViewInit {
 		scales: {
 			yAxes: [{
 				ticks: {
-					max: 100,
+					max: 15,
 					min: 0
 				}
 			}]
@@ -43,27 +43,22 @@ export class DashboardComponent implements AfterViewInit {
 	}
 
 	dashboardData() {
-		debugger
 		this.dashboardService.getDetails().subscribe(
 			(data: any) => {
-				this.barchart = this.data.barchart;
+				this.barchart = data;
 
-				if (this.barchart && this.barchart.length >= 2) {
+				if (this.barchart?.barchart && this.barchart?.barchart.length >= 2) {
 					this.data = {
-						labels: this.barchart[0], // Months
-						datasets: [
-							{
-								label: "Angular 11",
-								data: this.barchart[1][0], // Assuming the first dataset
-								backgroundColor: "#f38b4a"
-							}
-						]
+						labels: this.barchart?.barchart[0],
+						datasets: this.barchart?.barchart[1].map((dataset: any, index: number) => ({
+							label: `Số lượng`,
+							data: dataset.map((value: string) => parseInt(value, 10)),
+							backgroundColor: index === 0 ? "#7FFFD4" : "#6970d5",
+						})),
 					};
 				}
 			},
 			(error: any) => {
-				console.log(error);
-
 				if (error.error?.message) {
 					this.responseMessage = error.error?.responseMessage;
 				} else {

@@ -1,94 +1,32 @@
-<!-- <body>
-    <mat-card >
-        <b><span>Trang thống kê</span></b>
-    </mat-card>
-    <br>
-    <div class="row">
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng số danh mục:</h2>
-                    <h1 class="title">{{data?.category}}</h1>
+<mat-card>
+    <b><span>Trang thống kê</span></b>
+</mat-card>
+
+<div style="width: 100%; display: flex;">
+    <div style="width: 20%;">
+        <div class="row">
+            <div class="column">
+                <div class="card">
+                    <div class="container">
+                        <h2 class="title">Tổng số hóa đơn trong ngày:</h2>
+                        <h1 class="title">{{this.barchart?.getOne}}</h1>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng số sản phầm:</h2>
-                    <h1 class="title">{{data?.product}}</h1>
-                </div>
-            </div>
         </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng số hóa đơn:</h2>
-                    <h1 class="title">{{data?.bill}}</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng số người dùng:</h2>
-                    <h1 class="title">{{data?.user}}</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng số bài viết:</h2>
-                    <h1 class="title">{{data?.image}}</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Số lượng người truy cập:</h2>
-                    <h1 class="title">{{data?.counts}}</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Sản phẩm mới nhập:</h2>
-                    <h1 class="title">{{data?.getDateNowProduct}}</h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng doanh thu :</h2>
-                    <h1 class="title">{{data?.billSum}}</h1>
-                    
-                </div>
-            </div>
-        </div>
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng doanh thu ngày hôm nay:</h2>
-                    <h1 class="title">{{data?.sumBillByDate}}</h1>
+        <div class="row">
+            <div class="column">
+                <div class="card">
+                    <div class="container">
+                        <h2 class="title">Tổng thu nhập:</h2>
+                        <h1 class="title">{{this.barchart?.billSum}}</h1>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</body> -->
-<div style="width: 100%; display: flex;" >
-    <div style="width: 20%;">test</div>
-    <div style="width: 70%;"><chart [type]="type" [data]="data" [options]="options"></chart></div>
+    <div style="width: 80%;">
+        <chart [type]="type" [data]="data" [options]="options"></chart>
+    </div>
 </div>
-

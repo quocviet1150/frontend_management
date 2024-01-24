@@ -57,7 +57,6 @@ export class AppHeaderComponent {
 
 
   getUserLogin() {
-    debugger
     this.userService.getUserLogin().subscribe((response: any) => {
       this.user = response;
     }, (error) => {

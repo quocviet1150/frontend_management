@@ -33,6 +33,7 @@ export class DialogProductComponent implements OnInit {
       name: [null, [Validators.required]],
       categoryId: [null, [Validators.required]],
       description: [null, [Validators.required]],
+      quantity_product: [null, [Validators.required]],
       price: [null, [Validators.required]]
     });
     if (this.dialogData.action === 'Chỉnh sửa') {
@@ -93,6 +94,7 @@ export class DialogProductComponent implements OnInit {
       categoryId: formData.categoryId,
       price: formData.price,
       description: formData.description,
+      quantity_product: formData.quantity_product,
     }
 
     this.productService.createProduct(data).subscribe((response: any) => {
@@ -120,6 +122,7 @@ export class DialogProductComponent implements OnInit {
       categoryId: formData.categoryId,
       price: formData.price,
       description: formData.description,
+      quantity_product: formData.quantity_product,
     }
 
     this.productService.updateProduct(data).subscribe((response: any) => {

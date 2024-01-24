@@ -15,7 +15,7 @@ import { ConfirmationComponent } from '../dialog/confirmation/confirmation.compo
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'categoryName', 'description','createdDate', 'price', 'edit']
+  displayedColumns: string[] = ['name', 'categoryName', 'description','createdDate',"quantity_product", 'price', 'edit']
   dataSource: any;
   responseMessage: any;
   length1: any;

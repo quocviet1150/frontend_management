@@ -11,6 +11,8 @@ export class GlobalConstants {
 
     public static error: string = "error";
 
+    public static success: string = "success";
+
     public static unauthroized: string = "Bạn không phải là người được ủy quyền truy cập trang này";
 
     public static productExistError: "Sản phẩm đã tồn tại";

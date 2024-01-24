@@ -49,4 +49,17 @@ export class ProductService {
     return this.httpClient.get(this.url + "/product/get_by_id/" + id);
   }
 
+  decrementProductQuantity(id: any, quantity: any) {
+    return this.httpClient.post(this.url + "/product/" + id +"/decrement_quantity/" + quantity, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    })
+  }
+
+  incrementProductQuantity(id: any, quantity: any) {
+    return this.httpClient.post(this.url + "/product/" + id +"/increment_quantity/" + quantity, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    })
+  }
+
+
 }
