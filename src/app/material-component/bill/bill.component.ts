@@ -6,6 +6,8 @@ import { ProductService } from 'src/app/services/product.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { saveAs } from 'file-saver'
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bill',
@@ -28,7 +30,8 @@ export class BillComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private snackbarService: SnackbarService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -44,6 +47,12 @@ export class BillComponent implements OnInit {
       price: [null, [Validators.required]],
       total: [0, [Validators.required]],
     })
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.cancelOrder();
+      });
   }
 
   getCategorys() {
@@ -130,25 +139,54 @@ export class BillComponent implements OnInit {
 
   add() {
     var formData = this.billForm.value;
-    var productName = this.dataSource.find((e: { id: number }) => e.id === formData.product.id)
+    var productName = this.dataSource.find((e: { id: number }) => e.id === formData.product.id);
+
     if (productName === undefined) {
-      this.totalAmount = this.totalAmount + formData.total;
-      this.dataSource.push({
-        id: +formData.product.id,
-        name: formData.product.name,
-        category: formData.category.name,
-        quantity: formData.quantity,
-        price: formData.price,
-        total: +formData.total
-      })
-      this.dataSource = [...this.dataSource];
-      this.snackbarService.openSnackbar(GlobalConstants.productAdded, "success");
+      const originalQuantity = formData.quantity;
+
+      this.productService.decrementProductQuantity(formData.product.id, formData.quantity).subscribe(
+        (response: any) => {
+          this.totalAmount = this.totalAmount + formData.total;
+          this.dataSource.push({
+            id: +formData.product.id,
+            name: formData.product.name,
+            category: formData.category.name,
+            quantity: originalQuantity, // Sử dụng số lượng trước khi giảm
+            price: formData.price,
+            total: +formData.total
+          });
+          this.dataSource = [...this.dataSource];
+          this.snackbarService.openSnackbar("Thêm sản phẩm thành công", GlobalConstants.success);
+        },
+        (error: any) => {
+          if (error.status === 400 && error.error?.message === 'Out of stock') {
+            this.snackbarService.openSnackbar('Không thể giảm số lượng sản phẩm.', GlobalConstants.error);
+          } else {
+            this.snackbarService.openSnackbar('Sản phẩm đã hết hàng.', GlobalConstants.error);
+          }
+        }
+      );
     } else {
       this.snackbarService.openSnackbar(GlobalConstants.productExistError, GlobalConstants.error);
     }
   }
 
+  cancelOrder() {
+    const quantity = this.dataSource[0]?.quantity || 0;
+    const id = this.dataSource[0]?.id;
+
+    this.productService.incrementProductQuantity(id, quantity).subscribe(
+      (response: any) => {
+        this.totalAmount = 0;
+        this.dataSource = [];
+        this.snackbarService.openSnackbar('Reset sản phẩm thành công.', GlobalConstants.success);
+      },
+    );
+  }
+
+
   handleDeleteAction(value: any, element: any) {
+    this.cancelOrder();
     this.totalAmount = this.totalAmount - element.total;
     this.dataSource.splice(value, 1);
     this.dataSource = [...this.dataSource]
@@ -182,14 +220,19 @@ export class BillComponent implements OnInit {
 
   }
 
-  downloadFile(fileName: string) {
-    var data = {
-      uuid: fileName
-    }
+ downloadFile(fileName: string) {
+  var data = {
+    uuid: fileName
+  };
 
-    this.billForm.getPdf(data).subscribe((response: any) => {
+  this.billService.getPdf(data).subscribe(
+    (response: any) => {
       saveAs(response, fileName + '.pdf');
-    })
-  }
-  
+    },
+    (error: any) => {
+      console.error('Lỗi khi tải file PDF:', error);
+    }
+  );
+}
+
 }

@@ -1,18 +1,6 @@
-<body>
-    <mat-card>
-        <b><span>Trang chủ</span></b>
-    </mat-card>
-    <br>
-    <div class="row">
-
-        <div class="column">
-            <div class="card">
-                <div class="container">
-                    <h2 class="title">Tổng số sản phầm:</h2>
-                    <h1 class="title">{{data?.product}}</h1>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</body>
+<mat-card>
+    <b><span>Trang chủ</span></b>
+</mat-card>
+<div>
+    <chart [type]="type" [data]="data" [options]="options"></chart>
+</div>

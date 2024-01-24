@@ -39,6 +39,14 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Số lương sản phẩm</mat-label>
+                    <input matInput formControlName="quantity_product" required>
+                    <mat-error *ngIf="productForm.controls.name.touched && productForm.controls.quantity_product.invalid">
+                        <span *ngIf="productForm.controls.quantity_product.errors.required">Không được để trống số lương sản phẩm</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="standard" fxFlex>
                     <mat-label>Mô tả</mat-label>
                     <input matInput formControlName="description" required>
                     <mat-error *ngIf="productForm.controls.name.touched && productForm.controls.description.invalid">
