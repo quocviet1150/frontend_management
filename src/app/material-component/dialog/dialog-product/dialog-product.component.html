@@ -1,3 +1,4 @@
+<div class="loading" *ngIf="loading"></div>
 <mat-toolbar style="background-color: darkturquoise;">
     <mat-toolbar-row fxLayout="row">
         <span style="color: red;">{{dialogData.action}} sản phẩm</span>
@@ -41,8 +42,10 @@
                 <mat-form-field appearance="standard" fxFlex>
                     <mat-label>Số lương sản phẩm</mat-label>
                     <input matInput formControlName="quantity_product" required>
-                    <mat-error *ngIf="productForm.controls.name.touched && productForm.controls.quantity_product.invalid">
-                        <span *ngIf="productForm.controls.quantity_product.errors.required">Không được để trống số lương sản phẩm</span>
+                    <mat-error
+                        *ngIf="productForm.controls.name.touched && productForm.controls.quantity_product.invalid">
+                        <span *ngIf="productForm.controls.quantity_product.errors.required">Không được để trống số lương
+                            sản phẩm</span>
                     </mat-error>
                 </mat-form-field>
 

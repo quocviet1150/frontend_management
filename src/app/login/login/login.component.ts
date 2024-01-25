@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  
   hide = true;
   loginForm: any = FormGroup;
   responseMessage: any;
@@ -37,7 +38,6 @@ export class LoginComponent implements OnInit {
       userName: formData.userName,
       password: formData.password
     }
-
     this.userService.login(data).subscribe((response: any) => {
       this.dialogRef.close();
       localStorage.setItem('token', response.token);
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  
+
   get isFormValid() {
     return this.loginForm.valid && this.loginForm.dirty;
   }

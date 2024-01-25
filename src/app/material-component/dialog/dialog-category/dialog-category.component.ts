@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/services/category.service';
@@ -11,6 +11,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
   styleUrls: ['./dialog-category.component.scss']
 })
 export class DialogCategoryComponent implements OnInit {
+  @ViewChild('loader') loader!: ElementRef;
 
   onAddCategory = new EventEmitter();
   onEditCategory = new EventEmitter();
@@ -18,6 +19,7 @@ export class DialogCategoryComponent implements OnInit {
   dialogAction: any = "Thêm mới";
   action: any = "Thêm mới";
   responseMessage: any;
+  loading: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
@@ -47,17 +49,20 @@ export class DialogCategoryComponent implements OnInit {
   }
 
   add() {
+    this.loading = true;
     var formData = this.categoryForm.value;
     var data = {
       name: formData.name
     }
 
     this.categoryService.createCategory(data).subscribe((response: any) => {
+      this.loading = false;
       this.dialogRef.close();
       this.onAddCategory.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error) => {
+      this.loading = false;
       this.dialogRef.close();
       console.error(error);
       if (error.error?.message) {
@@ -71,6 +76,7 @@ export class DialogCategoryComponent implements OnInit {
   }
 
   edit() {
+    this.loading = true;
     var formData = this.categoryForm.value;
     var data = {
       id: this.dialogData.data.id,
@@ -78,11 +84,13 @@ export class DialogCategoryComponent implements OnInit {
     }
 
     this.categoryService.update_category(data).subscribe((response: any) => {
+      this.loading = false;
       this.dialogRef.close();
       this.onEditCategory.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error) => {
+      this.loading = false;
       this.dialogRef.close();
       console.error(error);
       if (error.error?.message) {

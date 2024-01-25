@@ -1,3 +1,4 @@
+<div class="loading" *ngIf="loading"></div>
 <mat-card>
     <b>
         <span>Quản lý đơn hàng</span>
@@ -91,6 +92,16 @@
                     </mat-select>
                 </mat-form-field>
 
+            </div>
+            <div fxLayout="row wrap">
+                <mat-form-field appearance="standard" fxFlex>
+                    <mat-label>Mô tả</mat-label>
+                    <input matInput formControlName="description" required readonly>
+                    <mat-error *ngIf="billForm.controls.description.touched && billForm.controls.description.invalid">
+                        <span *ngIf="billForm.controls.description.errors.required">Không được để trống giá </span>
+                    </mat-error>
+                </mat-form-field>
+
                 <mat-form-field appearance="standard" fxFlex>
                     <mat-label>Giá</mat-label>
                     <input matInput formControlName="price" required readonly>
@@ -109,9 +120,9 @@
 
                 <mat-form-field appearance="standard" fxFlex>
                     <mat-label>Tổng cộng</mat-label>
-                    <input matInput formControlName="total" required>
+                    <input matInput formControlName="total" required readonly>
                     <mat-error *ngIf="billForm.controls.total.touched && billForm.controls.total.invalid">
-                        <span *ngIf="billForm.controls.total.errors.required">Không được để trống tổng tiền </span>
+                        <span *ngIf="billForm.controls.total.errors.required">Không được để trống tổng tiền</span>
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -136,6 +147,11 @@
         <ng-container matColumnDef="category">
             <th mat-header-cell *matHeaderCellDef>Danh mục sản phẩm</th>
             <td mat-cell *matCellDef="let element">{{element.category}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Mô tả</th>
+            <td mat-cell *matCellDef="let element">{{element.description}}</td>
         </ng-container>
 
         <ng-container matColumnDef="price">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -14,9 +14,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'userName', 'contactNumber','createdDate', 'role', 'status'];
+  @ViewChild('loader') loader!: ElementRef;
+
+  displayedColumns: string[] = ['name', 'userName', 'contactNumber', 'createdDate', 'role', 'status'];
   dataSource: any = [];
   responseMessage: any;
+  loading: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -30,6 +33,7 @@ export class UserComponent implements OnInit {
   }
 
   tableData() {
+    this.loading = true
     this.userService.getUsers().subscribe((response: any) => {
       response.forEach((user: any) => {
         const createdDate = new Date(user.createdDate);
@@ -37,8 +41,13 @@ export class UserComponent implements OnInit {
         user.createdDate = formattedDate;
       });
       this.dataSource = new MatTableDataSource(response);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -54,6 +63,7 @@ export class UserComponent implements OnInit {
   }
 
   onChange(status: any, id: any) {
+    this.loading = true
     var data = {
       status: status.toString(),
       id: id
@@ -62,9 +72,13 @@ export class UserComponent implements OnInit {
     this.userService.update(data).subscribe((response: any) => {
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success");
-
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -88,12 +102,18 @@ export class UserComponent implements OnInit {
   }
 
   deleteUser(id: any) {
+    this.loading = true
     this.userService.delete(id).subscribe((response: any) => {
       this.tableData();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, 'success')
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
     }, (error: any) => {
-      console.log(error);
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -128,7 +148,7 @@ export class UserComponent implements OnInit {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
-  
+
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 }

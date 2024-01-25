@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BillService } from 'src/app/services/bill.service';
 import { CategoryService } from 'src/app/services/category.service';
@@ -15,15 +15,18 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./bill.component.scss']
 })
 export class BillComponent implements OnInit {
+  @ViewChild('loader') loader!: ElementRef;
 
-  displayedColumns: string[] = ['name', 'category', 'price', 'quantity', 'total', 'edit'];
+  displayedColumns: string[] = ['name', 'category', 'description', 'price', 'quantity', 'total', 'edit'];
   dataSource: any = [];
   responseMessage: any;
   categorys: any = [];
   products: any = [];
   price: any;
+  description: any;
   totalAmount: number = 0;
   billForm: any = FormGroup;
+  loading: boolean = false;
 
   constructor(
     private billService: BillService,
@@ -44,6 +47,7 @@ export class BillComponent implements OnInit {
       product: [null, [Validators.required]],
       category: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
+      description: [null, [Validators.required]],
       price: [null, [Validators.required]],
       total: [0, [Validators.required]],
     })
@@ -56,10 +60,16 @@ export class BillComponent implements OnInit {
   }
 
   getCategorys() {
+    this.loading = true;
     this.categoryService.getFilteredCategorys().subscribe((response: any) => {
       this.categorys = response;
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -71,15 +81,20 @@ export class BillComponent implements OnInit {
   }
 
   getProductsByCategory(value: any) {
-    console.log('tesst');
-
+    this.loading = true;
     this.productService.getProductsByCategory(value.id).subscribe((response: any) => {
       this.products = response;
       this.billForm.controls['price'].setValue('');
+      this.billForm.controls['description'].setValue('');
       this.billForm.controls['quantity'].setValue('');
       this.billForm.controls['total'].setValue('');
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -91,13 +106,21 @@ export class BillComponent implements OnInit {
   }
 
   getProductDetails(value: any) {
+    this.loading = true
     this.productService.getProductsById(value.id).subscribe((response: any) => {
+      this.description = response.description;
       this.price = response.price;
       this.billForm.controls['price'].setValue(response.price);
+      this.billForm.controls['description'].setValue(response.description);
       this.billForm.controls['quantity'].setValue("1");
       this.billForm.controls['total'].setValue(this.price * 1);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -138,6 +161,7 @@ export class BillComponent implements OnInit {
   }
 
   add() {
+    this.loading = true
     var formData = this.billForm.value;
     var productName = this.dataSource.find((e: { id: number }) => e.id === formData.product.id);
 
@@ -151,7 +175,8 @@ export class BillComponent implements OnInit {
             id: +formData.product.id,
             name: formData.product.name,
             category: formData.category.name,
-            quantity: originalQuantity, // Sử dụng số lượng trước khi giảm
+            quantity: originalQuantity,
+            description: formData.description,
             price: formData.price,
             total: +formData.total
           });
@@ -166,12 +191,19 @@ export class BillComponent implements OnInit {
           }
         }
       );
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     } else {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       this.snackbarService.openSnackbar(GlobalConstants.productExistError, GlobalConstants.error);
     }
   }
 
   cancelOrder() {
+    this.loading = true;
     const quantity = this.dataSource[0]?.quantity || 0;
     const id = this.dataSource[0]?.id;
 
@@ -182,6 +214,9 @@ export class BillComponent implements OnInit {
         this.snackbarService.openSnackbar('Reset sản phẩm thành công.', GlobalConstants.success);
       },
     );
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   }
 
 
@@ -193,6 +228,7 @@ export class BillComponent implements OnInit {
   }
 
   submitAction() {
+    this.loading = true;
     var formData = this.billForm.value;
     var data = {
       name: formData.name,
@@ -203,11 +239,18 @@ export class BillComponent implements OnInit {
       productDetails: JSON.stringify(this.dataSource)
     }
     this.billService.generateReport(data).subscribe((response: any) => {
+      this.loading = true;
       this.downloadFile(response?.uuid);
       this.billForm.reset();
       this.dataSource = [];
       this.totalAmount = 0;
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       console.log(error.error?.message);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
@@ -220,19 +263,19 @@ export class BillComponent implements OnInit {
 
   }
 
- downloadFile(fileName: string) {
-  var data = {
-    uuid: fileName
-  };
+  downloadFile(fileName: string) {
+    var data = {
+      uuid: fileName
+    };
 
-  this.billService.getPdf(data).subscribe(
-    (response: any) => {
-      saveAs(response, fileName + '.pdf');
-    },
-    (error: any) => {
-      console.error('Lỗi khi tải file PDF:', error);
-    }
-  );
-}
+    this.billService.getPdf(data).subscribe(
+      (response: any) => {
+        saveAs(response, fileName + '.pdf');
+      },
+      (error: any) => {
+        console.error('Lỗi khi tải file PDF:', error);
+      }
+    );
+  }
 
 }

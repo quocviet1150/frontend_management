@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/services/category.service';
@@ -12,6 +12,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
   styleUrls: ['./dialog-product.component.scss']
 })
 export class DialogProductComponent implements OnInit {
+  @ViewChild('loader') loader!: ElementRef;
 
   onAddProduct = new EventEmitter();
   onEditProduct = new EventEmitter();
@@ -20,6 +21,7 @@ export class DialogProductComponent implements OnInit {
   action: any = "Thêm mới";
   responseMessage: any;
   categorys: any = [];
+  loading: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any,
     private formBuilder: FormBuilder,
@@ -34,40 +36,25 @@ export class DialogProductComponent implements OnInit {
       categoryId: [null, [Validators.required]],
       description: [null, [Validators.required]],
       quantity_product: [null, [Validators.required]],
-      price: [null, [Validators.required]]
+      price: [null, [Validators.required]],
+      createdDate: []
     });
     if (this.dialogData.action === 'Chỉnh sửa') {
       this.dialogAction = 'Chỉnh sửa';
       this.action = "Chỉnh sửa"
       this.productForm.patchValue(this.dialogData.data);
     }
-    if (this.dialogAction === 'Chỉnh sửa') {
-      this.getCategorys();
-    } else {
       this.getCategory();
-    }
-    
+
   }
 
   getCategory() {
+    this.loading = true
     this.categoryService.getCategorys().subscribe((response: any) => {
       this.categorys = response;
+      this.loading = false;
     }, (error) => {
-      this.dialogRef.close();
-      console.log(error);
-      if (error.error?.message) {
-        this.responseMessage = error.error?.message;
-      } else {
-        this.responseMessage = GlobalConstants.genericError;
-      }
-      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
-    })
-  }
-
-  getCategorys() {
-    this.categoryService.getCategorys().subscribe((response: any) => {
-      this.categorys = response;
-    }, (error) => {
+      this.loading = false;
       this.dialogRef.close();
       console.log(error);
       if (error.error?.message) {
@@ -88,6 +75,7 @@ export class DialogProductComponent implements OnInit {
   }
 
   add() {
+    this.loading = true
     var formData = this.productForm.value;
     var data = {
       name: formData.name,
@@ -98,11 +86,13 @@ export class DialogProductComponent implements OnInit {
     }
 
     this.productService.createProduct(data).subscribe((response: any) => {
+      this.loading = false;
       this.dialogRef.close();
       this.onAddProduct.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error) => {
+      this.loading = false;
       this.dialogRef.close();
       console.error(error);
       if (error.error?.message) {
@@ -115,22 +105,28 @@ export class DialogProductComponent implements OnInit {
   }
 
   edit() {
+    this.loading = true
     var formData = this.productForm.value;
+    const createdDate = this.dialogData.data.createdDate;
+    debugger
     var data = {
       id: this.dialogData.data.id,
       name: formData.name,
       categoryId: formData.categoryId,
       price: formData.price,
       description: formData.description,
+      createdDate: createdDate,
       quantity_product: formData.quantity_product,
     }
 
     this.productService.updateProduct(data).subscribe((response: any) => {
+      this.loading = false;
       this.dialogRef.close();
       this.onEditProduct.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
     }, (error) => {
+      this.loading = false;
       this.dialogRef.close();
       console.error(error);
       if (error.error?.message) {
