@@ -15,7 +15,7 @@ import { ConfirmationComponent } from '../dialog/confirmation/confirmation.compo
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'categoryName', 'description', 'createdDate', "quantity_product", 'price', 'edit']
+  displayedColumns: string[] = ['name', 'categoryName', 'description', 'createdDate','updateDate', "quantity_product", 'price', 'edit']
   dataSource: any;
   responseMessage: any;
   length1: any;
@@ -37,6 +37,10 @@ export class ProductComponent implements OnInit {
         const createdDate = new Date(product.createdDate);
         const formattedDate = this.formatDate(createdDate);
         product.createdDate = formattedDate;
+
+        const updateDate = new Date(product.updateDate);
+        const formattedDate2 = this.formatDate(updateDate);
+        product.updateDate = formattedDate2;
 
         if (product.quantity_product === 0) {
           product.quantity_product = 'Hết hàng';

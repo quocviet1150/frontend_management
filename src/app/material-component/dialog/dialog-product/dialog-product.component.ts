@@ -34,7 +34,8 @@ export class DialogProductComponent implements OnInit {
       categoryId: [null, [Validators.required]],
       description: [null, [Validators.required]],
       quantity_product: [null, [Validators.required]],
-      price: [null, [Validators.required]]
+      price: [null, [Validators.required]],
+      createdDate:[]
     });
     if (this.dialogData.action === 'Chỉnh sửa') {
       this.dialogAction = 'Chỉnh sửa';
@@ -116,12 +117,15 @@ export class DialogProductComponent implements OnInit {
 
   edit() {
     var formData = this.productForm.value;
+    const createdDate = this.dialogData.data.createdDate;
+    debugger
     var data = {
       id: this.dialogData.data.id,
       name: formData.name,
       categoryId: formData.categoryId,
       price: formData.price,
       description: formData.description,
+      createdDate: createdDate,
       quantity_product: formData.quantity_product,
     }
 
