@@ -155,32 +155,37 @@ export class BillComponent implements OnInit {
   }
 
   add() {
-    this.loading = true
+    this.loading = true;
     var formData = this.billForm.value;
-    var productName = this.dataSource.find((e: { id: number }) => e.id === formData.product.id);
+    var existingProductIndex = this.dataSource.findIndex((e: { id: number }) => e.id === formData.product.id);
 
-    if (productName === undefined) {
+    if (existingProductIndex === -1) {
+      // Nếu sản phẩm chưa tồn tại trong dataSource, thêm mới vào
       this.totalAmount = this.totalAmount + formData.total;
       this.dataSource.push({
         id: +formData.product.id,
         name: formData.product.name,
         category: formData.category.name,
         quantity: formData.quantity,
+        description: formData.description,
         price: formData.price,
         total: +formData.total
-      })
+      });
       this.dataSource = [...this.dataSource];
-      this.snackbarService.openSnackbar(GlobalConstants.productAdded, "success");
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
+      this.snackbarService.openSnackbar("Đã thêm sản phẩm thành công.", GlobalConstants.success);
     } else {
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-      this.snackbarService.openSnackbar(GlobalConstants.productExistError, GlobalConstants.error);
+      this.totalAmount = this.totalAmount + formData.total;
+      this.dataSource[existingProductIndex].quantity = (parseInt(this.dataSource[existingProductIndex].quantity) + parseInt(formData.quantity)).toString();
+      this.dataSource[existingProductIndex].total += formData.total;
+      this.snackbarService.openSnackbar("Số lượng sản phẩm đã được cập nhật.", GlobalConstants.success);
     }
+
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   }
+
+
 
   cancelOrder() {
     this.loading = true;
@@ -201,7 +206,6 @@ export class BillComponent implements OnInit {
 
 
   handleDeleteAction(value: any, element: any) {
-    this.cancelOrder();
     this.totalAmount = this.totalAmount - element.total;
     this.dataSource.splice(value, 1);
     this.dataSource = [...this.dataSource]
@@ -215,6 +219,7 @@ export class BillComponent implements OnInit {
       email: formData.email,
       contactNumber: formData.contactNumber,
       paymentMethod: formData.paymentMethod,
+      description: formData.description,
       totalAmount: this.totalAmount.toString(),
       productDetails: JSON.stringify(this.dataSource)
     }
