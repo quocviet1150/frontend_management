@@ -51,12 +51,6 @@ export class BillComponent implements OnInit {
       price: [null, [Validators.required]],
       total: [0, [Validators.required]],
     })
-
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.cancelOrder();
-      });
   }
 
   getCategorys() {
@@ -166,31 +160,17 @@ export class BillComponent implements OnInit {
     var productName = this.dataSource.find((e: { id: number }) => e.id === formData.product.id);
 
     if (productName === undefined) {
-      const originalQuantity = formData.quantity;
-
-      this.productService.decrementProductQuantity(formData.product.id, formData.quantity).subscribe(
-        (response: any) => {
-          this.totalAmount = this.totalAmount + formData.total;
-          this.dataSource.push({
-            id: +formData.product.id,
-            name: formData.product.name,
-            category: formData.category.name,
-            quantity: originalQuantity,
-            description: formData.description,
-            price: formData.price,
-            total: +formData.total
-          });
-          this.dataSource = [...this.dataSource];
-          this.snackbarService.openSnackbar("Thêm sản phẩm thành công", GlobalConstants.success);
-        },
-        (error: any) => {
-          if (error.status === 400 && error.error?.message === 'Out of stock') {
-            this.snackbarService.openSnackbar('Không thể giảm số lượng sản phẩm.', GlobalConstants.error);
-          } else {
-            this.snackbarService.openSnackbar('Sản phẩm đã hết hàng.', GlobalConstants.error);
-          }
-        }
-      );
+      this.totalAmount = this.totalAmount + formData.total;
+      this.dataSource.push({
+        id: +formData.product.id,
+        name: formData.product.name,
+        category: formData.category.name,
+        quantity: formData.quantity,
+        price: formData.price,
+        total: +formData.total
+      })
+      this.dataSource = [...this.dataSource];
+      this.snackbarService.openSnackbar(GlobalConstants.productAdded, "success");
       setTimeout(() => {
         this.loading = false;
       }, 500);
@@ -238,29 +218,47 @@ export class BillComponent implements OnInit {
       totalAmount: this.totalAmount.toString(),
       productDetails: JSON.stringify(this.dataSource)
     }
-    this.billService.generateReport(data).subscribe((response: any) => {
-      this.loading = true;
-      this.downloadFile(response?.uuid);
-      this.billForm.reset();
-      this.dataSource = [];
-      this.totalAmount = 0;
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-    }, (error: any) => {
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-      console.log(error.error?.message);
-      if (error.error?.message) {
-        this.responseMessage = error.error?.message;
-      } else {
-        this.responseMessage = GlobalConstants.genericError;
+
+    this.productService.decrementProductQuantity(formData.product.id, formData.quantity).subscribe(
+      (response: any) => {
+        this.billService.generateReport(data).subscribe(
+          (response: any) => {
+            this.loading = true;
+            this.downloadFile(response?.uuid);
+            this.billForm.reset();
+            this.dataSource = [];
+            this.totalAmount = 0;
+            setTimeout(() => {
+              this.loading = false;
+            }, 500);
+          },
+          (error: any) => {
+            setTimeout(() => {
+              this.loading = false;
+            }, 500);
+            console.log(error.error?.message);
+            if (error.error?.message) {
+              this.responseMessage = error.error?.message;
+            } else {
+              this.responseMessage = GlobalConstants.genericError;
+            }
+            this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
+          }
+        );
+      },
+      (error: any) => {
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
+        console.error(error);
+        if (error.status === 400 && error.error?.message === 'Out of stock') {
+          this.snackbarService.openSnackbar('Không thể giảm số lượng sản phẩm.', GlobalConstants.error);
+          this.cancelOrder();
+        } else {
+          this.snackbarService.openSnackbar('Sản phẩm đã hết hàng.', GlobalConstants.error);
+        }
       }
-      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
-
-    })
-
+    );
   }
 
   downloadFile(fileName: string) {
