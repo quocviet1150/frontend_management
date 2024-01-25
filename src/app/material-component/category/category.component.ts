@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -13,10 +13,13 @@ import { DialogCategoryComponent } from '../dialog/dialog-category/dialog-catego
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent implements OnInit {
+  @ViewChild('loader') loader!: ElementRef;
 
   displayedColumns: string[] = ['name', 'edit'];
   dataSource: any;
   responseMessage: any;
+  loading: boolean = false;
+
   constructor(
     private categoryService: CategoryService,
     private dialog: MatDialog,
@@ -29,9 +32,16 @@ export class CategoryComponent implements OnInit {
   }
 
   tableData() {
+    this.loading = true;
     this.categoryService.getCategorys().subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       console.log(error.error?.message);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
@@ -79,6 +89,7 @@ export class CategoryComponent implements OnInit {
   }
 
   onChange(status: any, id: any) {
+    this.loading = true;
     var data = {
       status: status.toString(),
       id: id
@@ -87,9 +98,13 @@ export class CategoryComponent implements OnInit {
     this.categoryService.update(data).subscribe((response: any) => {
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success");
-
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,10 +16,12 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./view-bill.component.scss']
 })
 export class ViewBillComponent implements OnInit {
+  @ViewChild('loader') loader!: ElementRef;
 
-  displayedColumns: string[] = ['name', 'email', 'contactNumber','createdDate', 'paymentMethod', 'total', 'view'];
+  displayedColumns: string[] = ['name', 'email', 'contactNumber', 'createdDate', 'paymentMethod', 'total', 'view'];
   dataSource: any = [];
   responseMessage: any;
+  loading: boolean = false;
 
   constructor(
     private billService: BillService,
@@ -34,6 +36,7 @@ export class ViewBillComponent implements OnInit {
   }
 
   tableData() {
+    this.loading = true;
     this.billService.getBill().subscribe((response: any) => {
       response.forEach((bill: any) => {
         const createdDate = new Date(bill.createdDate);
@@ -41,8 +44,13 @@ export class ViewBillComponent implements OnInit {
         bill.createdDate = formattedDate;
       });
       this.dataSource = new MatTableDataSource(response);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -84,12 +92,18 @@ export class ViewBillComponent implements OnInit {
   }
 
   deleteBill(id: any) {
+    this.loading = true
     this.billService.delete(id).subscribe((response: any) => {
       this.tableData();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
+      setTimeout(() => {
+        this.loading = false;
+      }, 300);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 300);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -100,6 +114,7 @@ export class ViewBillComponent implements OnInit {
   }
 
   handleDowloadAction(value: any) {
+    this.loading = true
     var data = {
       name: value.name,
       email: value.email,
@@ -110,6 +125,9 @@ export class ViewBillComponent implements OnInit {
       productDetail: value.productDetail,
     }
     this.downloadFile(value.uuid, data)
+    setTimeout(() => {
+      this.loading = false;
+    }, 300);
   }
 
   downloadFile(fileName: string, data: any) {
@@ -125,7 +143,7 @@ export class ViewBillComponent implements OnInit {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
-  
+
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 

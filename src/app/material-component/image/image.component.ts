@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -14,9 +14,11 @@ import { UploadImageComponent } from '../dialog/upload-image/upload-image.compon
   styleUrls: ['./image.component.scss']
 })
 export class ImageComponent implements OnInit {
+  @ViewChild('loader') loader!: ElementRef;
 
   imageData: any[] | undefined;
   responseMessage: any;
+  loading: boolean = false;
 
   constructor(
     private imageService: UploadImageService,
@@ -30,10 +32,16 @@ export class ImageComponent implements OnInit {
   }
 
   getImage() {
+    this.loading = true;
     this.imageService.getImageDataAll().subscribe((response: any) => {
       this.imageData = response;
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -46,6 +54,7 @@ export class ImageComponent implements OnInit {
   }
 
   onChange(status: any, id: any) {
+    this.loading = true;
     var data = {
       status: status,
       id: id
@@ -54,8 +63,13 @@ export class ImageComponent implements OnInit {
     this.imageService.updateStatus(data).subscribe((response: any) => {
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
     }, (error: any) => {
-      console.log(error);
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -79,12 +93,18 @@ export class ImageComponent implements OnInit {
   }
 
   deleteProduct(id: any) {
+    this.loading = true
     this.imageService.delete(id).subscribe((response: any) => {
       this.getImage();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, 'success')
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
     }, (error: any) => {
-      console.log(error);
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {

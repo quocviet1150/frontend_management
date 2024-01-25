@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -15,10 +15,13 @@ import { ConfirmationComponent } from '../dialog/confirmation/confirmation.compo
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'categoryName', 'description', 'createdDate','updateDate', "quantity_product", 'price', 'edit']
+  @ViewChild('loader') loader!: ElementRef;
+
+  displayedColumns: string[] = ['name', 'categoryName', 'description', 'createdDate', 'updateDate', "quantity_product", 'price', 'edit']
   dataSource: any;
   responseMessage: any;
-  length1: any;
+  loading: boolean = false;
+
   constructor(
     private productService: ProductService,
     private dialog: MatDialog,
@@ -31,8 +34,8 @@ export class ProductComponent implements OnInit {
   }
 
   tableData() {
+    this.loading = true;
     this.productService.getProducts().subscribe((response: any) => {
-
       response.forEach((product: any) => {
         const createdDate = new Date(product.createdDate);
         const formattedDate = this.formatDate(createdDate);
@@ -46,12 +49,15 @@ export class ProductComponent implements OnInit {
           product.quantity_product = 'Hết hàng';
         }
       });
-
-
-
       this.dataSource = new MatTableDataSource(response);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
+
     }, (error: any) => {
-      console.log(error.error?.message);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -118,12 +124,18 @@ export class ProductComponent implements OnInit {
   }
 
   deleteProduct(id: any) {
+    this.loading = true
     this.productService.delete(id).subscribe((response: any) => {
       this.tableData();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, 'success')
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error: any) => {
-      console.log(error);
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -134,6 +146,7 @@ export class ProductComponent implements OnInit {
   }
 
   onChange(status: any, id: any) {
+    this.loading = true
     var data = {
       status: status.toString(),
       id: id
@@ -142,8 +155,13 @@ export class ProductComponent implements OnInit {
     this.productService.updateStatus(data).subscribe((response: any) => {
       this.responseMessage = response?.message;
       this.snackbarService.openSnackbar(this.responseMessage, "success")
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
     }, (error: any) => {
-      console.log(error);
+      setTimeout(() => {
+        this.loading = false;
+      }, 200);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {

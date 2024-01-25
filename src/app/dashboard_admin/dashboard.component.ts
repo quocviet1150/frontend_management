@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { SnackbarService } from '../services/snackbar.service';
 import { DashboardService } from '../services/dashboard.service';
 import { GlobalConstants } from '../shared/global-constants';
@@ -9,9 +9,9 @@ import { HttpClient } from '@angular/common/http';
 	styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements AfterViewInit {
+	@ViewChild('loader') loader!: ElementRef;
 	responseMessage: any;
-	// data: any;
-	// dataUser: any;
+	loading: boolean = false;
 	data: any;
 	barchart: any;
 
@@ -45,8 +45,8 @@ export class DashboardComponent implements AfterViewInit {
 	dashboardData() {
 		this.dashboardService.getDetails().subscribe(
 			(data: any) => {
+				this.loading = true;
 				this.barchart = data;
-
 				if (this.barchart?.barchart && this.barchart?.barchart.length >= 2) {
 					this.data = {
 						labels: this.barchart?.barchart[0],
@@ -57,8 +57,14 @@ export class DashboardComponent implements AfterViewInit {
 						})),
 					};
 				}
+				setTimeout(() => {
+					this.loading = false;
+				}, 500);
 			},
 			(error: any) => {
+				setTimeout(() => {
+					this.loading = false;
+				}, 500);
 				if (error.error?.message) {
 					this.responseMessage = error.error?.responseMessage;
 				} else {

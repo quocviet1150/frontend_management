@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -14,10 +14,12 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
   styleUrls: []
 })
 export class AppHeaderComponent {
+  @ViewChild('loader') loader!: ElementRef;
   user: any = [];
   role: any;
   responseMessage: any;
   private logoutTimer: any;
+  loading: boolean = false;
 
   constructor(
     private router: Router,
@@ -58,8 +60,15 @@ export class AppHeaderComponent {
 
   getUserLogin() {
     this.userService.getUserLogin().subscribe((response: any) => {
+      this.loading = true
       this.user = response;
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
     }, (error) => {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
       console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
