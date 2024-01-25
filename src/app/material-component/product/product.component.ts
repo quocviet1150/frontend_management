@@ -15,7 +15,7 @@ import { ConfirmationComponent } from '../dialog/confirmation/confirmation.compo
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'categoryName', 'description','createdDate',"quantity_product", 'price', 'edit']
+  displayedColumns: string[] = ['name', 'categoryName', 'description', 'createdDate', "quantity_product", 'price', 'edit']
   dataSource: any;
   responseMessage: any;
   length1: any;
@@ -38,12 +38,12 @@ export class ProductComponent implements OnInit {
         const formattedDate = this.formatDate(createdDate);
         product.createdDate = formattedDate;
 
-        if (product.quantity_product === "0") {
+        if (product.quantity_product === 0) {
           product.quantity_product = 'Hết hàng';
-        } 
+        }
       });
 
-      
+
 
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
@@ -79,6 +79,10 @@ export class ProductComponent implements OnInit {
   }
 
   handleEdit(values: any) {
+
+    if (values.quantity_product === 'Hết hàng') {
+      values.quantity_product = 0;
+    }
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
@@ -152,7 +156,7 @@ export class ProductComponent implements OnInit {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
-  
+
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
