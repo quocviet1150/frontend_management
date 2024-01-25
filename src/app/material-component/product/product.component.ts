@@ -37,7 +37,13 @@ export class ProductComponent implements OnInit {
         const createdDate = new Date(product.createdDate);
         const formattedDate = this.formatDate(createdDate);
         product.createdDate = formattedDate;
+
+        if (product.quantity_product === "0") {
+          product.quantity_product = 'Hết hàng';
+        } 
       });
+
+      
 
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
