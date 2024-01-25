@@ -179,6 +179,7 @@ export class BillComponent implements OnInit {
       this.dataSource[existingProductIndex].total += formData.total;
       this.snackbarService.openSnackbar("Số lượng sản phẩm đã được cập nhật.", GlobalConstants.success);
     }
+    this.billForm.reset();
 
     setTimeout(() => {
       this.loading = false;
