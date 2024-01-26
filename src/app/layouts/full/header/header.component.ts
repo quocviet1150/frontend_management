@@ -62,7 +62,9 @@ export class AppHeaderComponent {
   getUserLogin() {
     this.userService.getUserLogin().subscribe((response: any) => {
       this.loading = true
-      this.user = response;
+      this.user = response.userDetail;
+      console.log(response);
+      
       setTimeout(() => {
         this.loading = false;
       }, 500);
@@ -102,7 +104,7 @@ export class AppHeaderComponent {
 
     this.userService.getUserLogin().subscribe((response: any) => {
       dialogConfig.data = {
-        user: response
+        user: response.userDetail
       };
 
       const dialogRef = this.dialog.open(InformationComponent, dialogConfig);
