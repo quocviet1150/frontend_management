@@ -11,30 +11,41 @@
 
 <mat-dialog-content class="mat-typography">
     <div fxFlex fxLayout="column">
-      <div fxLayout="row wrap">
-        <mat-form-field appearance="standard" fxFlex>
-          <mat-label>Tên người dùng</mat-label>
-          <input matInput required [(ngModel)]="user.name">
-        </mat-form-field>
-        <div style="margin-left: 10px;"></div>
-        <mat-form-field appearance="standard" fxFlex>
-          <mat-label>Số điện thoại</mat-label>
-          <input matInput required [(ngModel)]="user.contactNumber">
-        </mat-form-field>
-      </div>
-  
-      <div fxLayout="row wrap">
-        <mat-form-field appearance="standard" fxFlex>
-          <mat-label>Tên đăng nhập</mat-label>
-          <input matInput required value="{{ user.userName }}" disabled="true">
-        </mat-form-field>
-      </div>
+        <div fxLayout="row wrap">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Tên người dùng</mat-label>
+                <input matInput required [(ngModel)]="user.name">
+            </mat-form-field>
+            <div style="margin-left: 10px;"></div>
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Số điện thoại</mat-label>
+                <input matInput required [(ngModel)]="user.contactNumber">
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row wrap">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Tên đăng nhập</mat-label>
+                <input matInput required value="{{ user.userName }}" disabled="true">
+            </mat-form-field>
+        </div>
+        <div fxLayout="row wrap">
+            <div class="text-center" style="display: grid; width: 20%;">
+                <input class="form-control" type="file" (change)="onFileChange($event)" accept=".png, .jpg, .jpeg">
+                <div *ngIf="selectedImage" class="img-container">
+                    <img [src]="selectedImage" class="img-preview" alt="Selected Image">
+                    <button (click)="deleteImage()" class="delete-button">X</button>
+                </div>
+                <div *ngIf="selectedImage" class="file-name" [ngClass]="{'tooltip': fileName && fileName.length > 10}"
+                    [title]="fileName"></div>
+            </div>
     </div>
-  </mat-dialog-content>
-  
+    </div>
+</mat-dialog-content>
+
 
 <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" type="submit" (click)="updateUser()">
+    <button mat-raised-button color="primary" type="submit" (click)="handleUploadImage()">
         <mat-icon>save</mat-icon>Xác nhận
     </button>
 

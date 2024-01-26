@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -64,4 +65,12 @@ export class UserService {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     })
   }
+
+  uploadImage(id: any, file: File): Observable<any> {
+    const formData = new FormData();
+
+    formData.append("file", file);
+    return this.httpClient.post(this.url + "/user/update_image/" + id, formData);
+  }
+
 }
