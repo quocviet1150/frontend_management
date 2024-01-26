@@ -58,4 +58,10 @@ export class UserService {
       headers: new HttpHeaders().set('Content-Type', 'application/json')
     })
   }
+
+  updateUser(id: any, data: any) {
+    return this.httpClient.post(this.url + "/user/update_information/" + id, data, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    })
+  }
 }

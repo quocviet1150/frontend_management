@@ -97,19 +97,30 @@ export class AppHeaderComponent {
   }
 
   edit() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "30%";
+  
     this.userService.getUserLogin().subscribe((response: any) => {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = "30%";
       dialogConfig.data = {
         user: response
       };
-      this.dialog.open(InformationComponent, dialogConfig);
-    }, (error) => {
-      console.log(error);
-      this.responseMessage = error.error?.message || GlobalConstants.genericError;
-      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error);
+  
+      const dialogRef = this.dialog.open(InformationComponent, dialogConfig);
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 'success') {
+          dialogRef.close();
+          this.snackbarService.openSnackbar("Chỉnh sửa thông tin thành công", "success");
+        } else if (result === 'error') {
+          dialogRef.close();
+          this.snackbarService.openSnackbar("Chỉnh sửa thông tin không thành công", "success");
+        }
+      });
+
     });
   }
+  
+
 
   userIsLoggedIn(): boolean {
     return true;
