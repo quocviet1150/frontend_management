@@ -1,0 +1,43 @@
+<mat-toolbar style="background-color: darkturquoise;">
+    <mat-toolbar-row fxLayout="row">
+        <span style="color: red;">Thông tin cá nhân</span>
+        <span class="spacer"></span>
+        <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+            <mat-icon style="color: red;">close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <div fxFlex fxLayout="column">
+        <div fxLayout="row wrap">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Tên người dùng</mat-label>
+                <input matInput required value="{{ user.name }}">
+            </mat-form-field>
+            <div style="margin-left: 10px;"></div>
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Số điện thoại</mat-label>
+                <input matInput required value="{{ user.contactNumber }}">
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row wrap">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Tên đăng nhập</mat-label>
+                <input matInput required value="{{ user.userName }}" disabled="true" >
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit">
+        <mat-icon>save</mat-icon>Xác nhận
+    </button>
+
+    <button mat-raised-button style="background-color: red;" mat-dialog-close>
+        <mat-icon>cancel</mat-icon>Hủy
+    </button>
+
+</mat-dialog-actions>

@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { InformationComponent } from 'src/app/information/information.component';
 import { ChangePasswordComponent } from 'src/app/material-component/dialog/change-password/change-password.component';
 import { ConfirmationComponent } from 'src/app/material-component/dialog/confirmation/confirmation.component';
 import { SnackbarService } from 'src/app/services/snackbar.service';
@@ -83,7 +84,7 @@ export class AppHeaderComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "400px";
     dialogConfig.data = {
-      message: 'Đăng xuất không?',
+      message: 'đăng xuất không?',
       confirmation: true
     };
 
@@ -93,6 +94,21 @@ export class AppHeaderComponent {
       localStorage.clear();
       this.router.navigate(['/']);
     })
+  }
+
+  edit() {
+    this.userService.getUserLogin().subscribe((response: any) => {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "30%";
+      dialogConfig.data = {
+        user: response
+      };
+      this.dialog.open(InformationComponent, dialogConfig);
+    }, (error) => {
+      console.log(error);
+      this.responseMessage = error.error?.message || GlobalConstants.genericError;
+      this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error);
+    });
   }
 
   userIsLoggedIn(): boolean {

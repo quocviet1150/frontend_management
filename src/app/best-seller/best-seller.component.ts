@@ -44,12 +44,8 @@ export class BestSellerComponent implements OnInit {
   openImageModal(base64Image: string): void {
     const modalImage = this.el.nativeElement.querySelector('#modalImage');
     this.renderer.setAttribute(modalImage, 'src', 'data:image/jpg;base64,' + base64Image);
-
-    // Set the width and height of the image (for example, 800px x 600px)
     this.renderer.setStyle(modalImage, 'width', '500px');
     this.renderer.setStyle(modalImage, 'height', '500px');
-
-    // Open the modal
     const modal = new bootstrap.Modal(this.el.nativeElement.querySelector('#imageModal'));
     modal.show();
   }
