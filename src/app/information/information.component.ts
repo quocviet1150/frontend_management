@@ -36,66 +36,89 @@ export class InformationComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  handleUploadImage() {
-    forkJoin([
-      this.uploadImage(),
+  uploadImageAndThenUpdateUser(): void {
+    if (this.file) {
+      const id = this.user.id;
+      this.userService.uploadImage(id, this.file).subscribe(
+        (response: any) => {
+          this.responseMessage = response?.message;
+          this.updateUser()
+        },
+        (error) => {
+          this.dialogRef.close();
+          console.error(error);
+          if (error.error?.message) {
+            this.responseMessage = error.error?.message;
+          } else {
+            this.responseMessage = GlobalConstants.genericError;
+          }
+          this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error)
+        }
+      );
+    } else {
       this.updateUser()
-    ]).subscribe(() => {
-      console.log('Both uploadImage and updateUser completed successfully.');
-    }, (error) => {
-      console.error('An error occurred:', error);
-    });
+      this.responseMessage = GlobalConstants.FileZeroError;
+    }
   }
 
-  updateUser() {
+  updateUser(): void {
     this.loading = true;
     var id = this.user.id;
     var data = {
       name: this.user.name,
       contactNumber: this.user.contactNumber
     };
-    this.uploadImage();
-    this.userService.updateUser(id, data).subscribe((response: any) => {
-      setTimeout(() => {
-        this.loading = false;
-      }, 200);
-      this.dialogRef.close('success');
-    }, (error) => {
-      setTimeout(() => {
-        this.loading = false;
-      }, 200);
-      this.dialogRef.close('error');
-    });
+    this.userService.updateUser(id, data).subscribe(
+      (response: any) => {
+        setTimeout(() => {
+          this.loading = false;
+        }, 200);
+        this.dialogRef.close(1);
+      },
+      (error) => {
+        setTimeout(() => {
+          this.loading = false;
+        }, 200);
+        this.dialogRef.close(2);
+      }
+    );
   }
 
-  uploadImage(): void {
-    if (this.file) {
-      var id = this.user.id;
-      this.userService.uploadImage(id, this.file).subscribe(
-        (response: any) => {
-          this.responseMessage = response.message;
-          this.snackbarService.openSnackbar(this.responseMessage, "success");
-        },
-        (error) => {
-          console.log(error);
-          this.dialogRef.close();
-          if (error.error && error.error.message) {
-            this.responseMessage = error.error.message;
-          } else {
-            this.responseMessage = GlobalConstants.genericError;
-          }
 
-          this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error);
-        }
-      );
-    } else {
-      this.responseMessage = GlobalConstants.FileZeroError;
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      this.handleFile(file);
     }
   }
 
-  deleteImage(): void {
+  handleFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedImage = reader.result;
+      this.file = file;
+      this.fileName = file.name;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  deleteImage() {
     this.selectedImage = null;
-    this.fileName = null;
+    this.fileName = '';
+    this.file = null;
 
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
@@ -103,7 +126,30 @@ export class InformationComponent implements OnInit {
     }
   }
 
-    onFileChange(event: any): void {
+  // uploadImage(): void {
+  //   if (this.file) {
+  //     const id = this.user.id;
+  //     this.userService.uploadImage(id, this.file).subscribe(
+  //       (response: any) => {
+  //         this.responseMessage = response?.message;
+  //         this.snackbarService.openSnackbar(this.responseMessage, "success");
+  //       }, (error) => {
+  //         console.log(error);
+  //         if (error.error && error.error.message) {
+  //           this.responseMessage = error.error.message;
+  //         } else {
+  //           this.responseMessage = GlobalConstants.genericError;
+  //         }
+
+  //         this.snackbarService.openSnackbar(this.responseMessage, GlobalConstants.error);
+  //       }
+  //     );
+  //   } else {
+  //     this.responseMessage = GlobalConstants.FileZeroError;
+  //   }
+  // }
+
+  onFileChange(event: any): void {
     const file = event.target.files[0];
 
     if (file) {
@@ -118,13 +164,12 @@ export class InformationComponent implements OnInit {
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target?.result) {
-        this.selectedImage = e.target.result;
+        this.selectedImage = e.target.result as string;
         this.file = file;
         this.fileName = file.name;
       }
     };
     reader.readAsDataURL(file);
   }
-
-
 }
+

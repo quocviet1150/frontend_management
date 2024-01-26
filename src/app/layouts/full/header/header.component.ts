@@ -108,10 +108,10 @@ export class AppHeaderComponent {
       const dialogRef = this.dialog.open(InformationComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(result => {
-        if (result === 'success') {
+        if (result === 2) {
           dialogRef.close();
           this.snackbarService.openSnackbar("Chỉnh sửa thông tin thành công", "success");
-        } else if (result === 'error') {
+        } else if (result === 1) {
           dialogRef.close();
           this.snackbarService.openSnackbar("Chỉnh sửa thông tin không thành công", "success");
         }

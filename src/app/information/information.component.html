@@ -30,22 +30,32 @@
             </mat-form-field>
         </div>
         <div fxLayout="row wrap">
-            <div class="text-center" style="display: grid; width: 20%;">
-                <input class="form-control" type="file" (change)="onFileChange($event)" accept=".png, .jpg, .jpeg">
+            <div class="text-center" style="display: grid; width: 100%;justify-content: center;">
+                <input #fileInput type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange($event)"
+                    style="display: none;">
+
+                <label class="drag-and-drop" *ngIf="!selectedImage" (click)="fileInput.click()"
+                    (dragover)="onDragOver($event)" (drop)="onDrop($event)" (dragleave)="onDragLeave($event)">
+                    Kéo thả hoặc click để chọn hình ảnh
+                </label>
+
                 <div *ngIf="selectedImage" class="img-container">
                     <img [src]="selectedImage" class="img-preview" alt="Selected Image">
-                    <button (click)="deleteImage()" class="delete-button">X</button>
+                    <button (click)="deleteImage()" class="delete-button">Xóa</button>
                 </div>
+
                 <div *ngIf="selectedImage" class="file-name" [ngClass]="{'tooltip': fileName && fileName.length > 10}"
-                    [title]="fileName"></div>
+                    [title]="fileName">{{ fileName }}</div>
+
             </div>
-    </div>
+
+        </div>
     </div>
 </mat-dialog-content>
 
 
 <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" type="submit" (click)="handleUploadImage()">
+    <button mat-raised-button color="primary" type="submit" (click)="uploadImageAndThenUpdateUser()">
         <mat-icon>save</mat-icon>Xác nhận
     </button>
 

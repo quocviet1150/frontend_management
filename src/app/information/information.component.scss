@@ -3,3 +3,57 @@
     width: auto;
     margin-bottom: 10px;
 }
+
+.drag-and-drop {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    width: 200px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+}
+
+.img-container {
+    margin-top: 20px;
+    position: relative;
+}
+
+.img-preview {
+    max-width: 500px;
+    max-height: 250px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #fff;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.file-name {
+    margin-top: 10px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip::after {
+    content: attr(title);
+    position: absolute;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
