@@ -104,7 +104,7 @@ export class AppHeaderComponent {
 
     this.userService.getUserLogin().subscribe((response: any) => {
       dialogConfig.data = {
-        user: response.userDetail
+        user: response
       };
 
       const dialogRef = this.dialog.open(InformationComponent, dialogConfig);

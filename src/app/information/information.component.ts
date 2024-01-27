@@ -21,6 +21,7 @@ export class InformationComponent implements OnInit {
   selectedImage: string | ArrayBuffer | null = null;
   file: File | null = null;
   fileName: string | null = null;
+  imageSelected: string | ArrayBuffer | null = null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
@@ -30,6 +31,8 @@ export class InformationComponent implements OnInit {
     private snackbarService: SnackbarService,
   ) {
     this.user = dialogData.user;
+    console.log("data",this.user);
+    
 
   }
 
@@ -38,7 +41,7 @@ export class InformationComponent implements OnInit {
 
   uploadImageAndThenUpdateUser(): void {
     if (this.file) {
-      const id = this.user.id;
+      const id = this.user.userDetail.id;
       this.userService.uploadImage(id, this.file).subscribe(
         (response: any) => {
           this.responseMessage = response?.message;

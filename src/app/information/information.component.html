@@ -14,19 +14,19 @@
         <div fxLayout="row wrap">
             <mat-form-field appearance="standard" fxFlex>
                 <mat-label>Tên người dùng</mat-label>
-                <input matInput required [(ngModel)]="user.name">
+                <input matInput required [(ngModel)]="user.userDetail.name">
             </mat-form-field>
             <div style="margin-left: 10px;"></div>
             <mat-form-field appearance="standard" fxFlex>
                 <mat-label>Số điện thoại</mat-label>
-                <input matInput required [(ngModel)]="user.contactNumber">
+                <input matInput required [(ngModel)]="user.userDetail.contactNumber">
             </mat-form-field>
         </div>
 
         <div fxLayout="row wrap">
             <mat-form-field appearance="standard" fxFlex>
                 <mat-label>Tên đăng nhập</mat-label>
-                <input matInput required value="{{ user.userName }}" disabled="true">
+                <input matInput required value="{{ user.userDetail.userName }}" disabled="true">
             </mat-form-field>
         </div>
         <div fxLayout="row wrap">
@@ -34,10 +34,13 @@
                 <input #fileInput type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange($event)"
                     style="display: none;">
 
-                <label class="drag-and-drop" *ngIf="!selectedImage" (click)="fileInput.click()"
+                <label  class="drag-and-drop" *ngIf="!selectedImage && !user.imageBase64" (click)="fileInput.click()"
                     (dragover)="onDragOver($event)" (drop)="onDrop($event)" (dragleave)="onDragLeave($event)">
                     Kéo thả hoặc click để chọn hình ảnh
                 </label>
+
+                <img *ngIf="user.imageBase64" [src]="'data:image/jpg;base64,' + user.imageBase64 " alt="">
+
 
                 <div *ngIf="selectedImage" class="img-container">
                     <img [src]="selectedImage" class="img-preview" alt="Selected Image">
