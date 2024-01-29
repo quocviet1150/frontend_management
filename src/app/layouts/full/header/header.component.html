@@ -1,16 +1,18 @@
 <div class="loading" *ngIf="loading"></div>
 <div style="display: flex; justify-content: end; align-items: center;">
-    <div *ngIf="user" style="margin-right: 10px;">
-        {{user.name}}
-    </div>
-
-    <img *ngIf="image" [src]="'data:image/jpg;base64,' + image" alt="" class="profile-image">
-    <img *ngIf="!image" src="../../assets/img/images.png" alt="" class="profile-image">
-
-
     <button mat-icon-button class="m-r-5" style="cursor: pointer;">
-        <mat-icon [matMenuTriggerFor]="profile" style="margin-right: 10px;">touch_app</mat-icon>
+        <mat-icon [matMenuTriggerFor]="profile">settings</mat-icon>
     </button>
+    <div class="profile-home">
+        <div *ngIf="user" style="margin-right: 10px; font-size: 16px;">
+            {{user.name}}
+        </div>
+        <div (click)="view()" style="cursor: pointer;">
+
+            <img *ngIf="image" [src]="'data:image/jpg;base64,' + image" alt="" class="profile-image">
+            <img *ngIf="!image" src="../../assets/img/images.png" alt="" class="profile-image">
+        </div>
+    </div>
 </div>
 
 <mat-menu #profile="matMenu" class="mymegamenu">

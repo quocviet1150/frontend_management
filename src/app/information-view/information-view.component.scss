@@ -1,0 +1,57 @@
+.mat-toolbar {
+    margin: -24px;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.drag-and-drop {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    width: 200px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+}
+
+.img-container {
+    position: relative;
+}
+
+
+.imageBase64 {
+    max-width: 80px;
+    // max-height: 125px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.file-name {
+    margin-top: 10px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip::after {
+    content: attr(title);
+    position: absolute;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}

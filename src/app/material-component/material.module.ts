@@ -23,6 +23,7 @@ import { DialogUserComponent } from './dialog/dialog-user/dialog-user.component'
 import { UploadImageComponent } from './dialog/upload-image/upload-image.component';
 import { ImageComponent } from './image/image.component';
 import { InformationComponent } from '../information/information.component';
+import { InformationViewComponent } from '../information-view/information-view.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { InformationComponent } from '../information/information.component';
     DialogUserComponent,
     UploadImageComponent,
     ImageComponent,
-    InformationComponent
+    InformationComponent,
+    InformationViewComponent
   ]
 })
 export class MaterialComponentsModule {}

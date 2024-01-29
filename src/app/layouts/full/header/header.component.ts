@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { InformationViewComponent } from 'src/app/information-view/information-view.component';
 import { InformationComponent } from 'src/app/information/information.component';
 import { ChangePasswordComponent } from 'src/app/material-component/dialog/change-password/change-password.component';
 import { ConfirmationComponent } from 'src/app/material-component/dialog/confirmation/confirmation.component';
@@ -95,6 +96,7 @@ export class AppHeaderComponent {
   edit() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "30%";
+    dialogConfig.disableClose = true;
 
     this.userService.getUserLogin().subscribe((response: any) => {
       dialogConfig.data = {
@@ -113,6 +115,20 @@ export class AppHeaderComponent {
         }
       });
 
+    });
+  }
+
+  view() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "20%";
+    dialogConfig.position = { top: '3.45%', right: '0' };
+    // dialogConfig.disableClose = true;
+
+    this.userService.getUserLogin().subscribe((response: any) => {
+      dialogConfig.data = {
+        user: response
+      };
+      const dialogRef = this.dialog.open(InformationViewComponent, dialogConfig);
     });
   }
 
