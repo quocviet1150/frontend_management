@@ -66,10 +66,10 @@ export class InformationComponent implements OnInit {
 
   updateUser(): void {
     this.loading = true;
-    var id = this.user.id;
+    var id = this.user.userDetail.id;
     var data = {
-      name: this.user.name,
-      contactNumber: this.user.contactNumber
+      name: this.user.userDetail.name,
+      contactNumber: this.user.userDetail.contactNumber
     };
     this.userService.updateUser(id, data).subscribe(
       (response: any) => {

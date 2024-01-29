@@ -16,23 +16,21 @@
 }
 
 .img-container {
-    margin-top: 20px;
     position: relative;
 }
 
-.img-preview {
-    max-width: 500px;
-    max-height: 250px;
+
+.imageBase64 {
+    max-width: 80px;
+    // max-height: 125px;
 }
 
 .delete-button {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: #fff;
+    top: 0;
+    right: 0;
+    background: none;
     border: none;
-    padding: 5px;
-    border-radius: 50%;
     cursor: pointer;
 }
 

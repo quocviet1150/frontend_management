@@ -12,11 +12,12 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: []
+  styleUrls: ['./header.component.scss']
 })
 export class AppHeaderComponent {
   @ViewChild('loader') loader!: ElementRef;
   user: any = [];
+  image: any = [];
   role: any;
   responseMessage: any;
   private logoutTimer: any;
@@ -41,11 +42,6 @@ export class AppHeaderComponent {
       this.router.navigate(['/']);
     }, logoutTimeInMilliseconds);
   }
-  // private resetLogoutTimer() {
-  //   clearTimeout(this.logoutTimer);
-  //   this.startLogoutTimer();
-  // }
-
 
   onUserActivity() {
     this.resetLogoutTimer();
@@ -58,13 +54,11 @@ export class AppHeaderComponent {
     this.dialog.open(ChangePasswordComponent, dialogConfig);
   }
 
-
   getUserLogin() {
     this.userService.getUserLogin().subscribe((response: any) => {
       this.loading = true
       this.user = response.userDetail;
-      console.log(response);
-      
+      this.image = response.imageBase64;
       setTimeout(() => {
         this.loading = false;
       }, 500);

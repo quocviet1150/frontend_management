@@ -1,17 +1,21 @@
 <div class="loading" *ngIf="loading"></div>
-<div style="display: flex; justify-content: center; align-items: center;">
+<div style="display: flex; justify-content: end; align-items: center;">
     <div *ngIf="user" style="margin-right: 10px;">
         {{user.name}}
     </div>
-    <mat-icon>account_circle</mat-icon>
+
+    <img *ngIf="image" [src]="'data:image/jpg;base64,' + image" alt="" class="profile-image">
+    <img *ngIf="!image" src="../../assets/img/images.png" alt="" class="profile-image">
+
+
     <button mat-icon-button class="m-r-5" style="cursor: pointer;">
-    <mat-icon [matMenuTriggerFor]="profile" style="margin-right: 10px;">touch_app</mat-icon>
+        <mat-icon [matMenuTriggerFor]="profile" style="margin-right: 10px;">touch_app</mat-icon>
     </button>
 </div>
 
 <mat-menu #profile="matMenu" class="mymegamenu">
     <button mat-menu-item (click)="edit()">
-        <mat-icon>edit_location</mat-icon>Thông tin cá nhân 
+        <mat-icon>edit_location</mat-icon>Thông tin cá nhân
     </button>
 
     <button mat-menu-item (click)="changePassword()">

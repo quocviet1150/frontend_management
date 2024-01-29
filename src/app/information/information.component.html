@@ -30,26 +30,23 @@
             </mat-form-field>
         </div>
         <div fxLayout="row wrap">
-            <div class="text-center" style="display: grid; width: 100%;justify-content: center;">
+            <mat-label style="color: red; margin-bottom: 2%;">Ảnh đại diện:</mat-label>
+            <div class="text-center" style="display: grid; width: 100%;justify-content: start;">
                 <input #fileInput type="file" accept=".png, .jpg, .jpeg" (change)="onFileChange($event)"
                     style="display: none;">
-
-                <label  class="drag-and-drop" *ngIf="!selectedImage && !user.imageBase64" (click)="fileInput.click()"
-                    (dragover)="onDragOver($event)" (drop)="onDrop($event)" (dragleave)="onDragLeave($event)">
-                    Kéo thả hoặc click để chọn hình ảnh
-                </label>
-
-                <img *ngIf="user.imageBase64" [src]="'data:image/jpg;base64,' + user.imageBase64 " alt="">
-
+                <img *ngIf="user.imageBase64 && !selectedImage" [src]="'data:image/jpg;base64,' + user.imageBase64 "
+                    alt="" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                    (dragleave)="onDragLeave($event)" class="imageBase64">
+                <img *ngIf="!user.imageBase64 && !selectedImage" src="../../assets/img/images.png" alt=""
+                    (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)"
+                    (dragleave)="onDragLeave($event)" class="imageBase64">
 
                 <div *ngIf="selectedImage" class="img-container">
-                    <img [src]="selectedImage" class="img-preview" alt="Selected Image">
-                    <button (click)="deleteImage()" class="delete-button">Xóa</button>
+                    <img [src]="selectedImage" class="imageBase64" alt="Selected Image">
+                    <button (click)="deleteImage()" class="delete-button">X</button>
                 </div>
-
                 <div *ngIf="selectedImage" class="file-name" [ngClass]="{'tooltip': fileName && fileName.length > 10}"
                     [title]="fileName">{{ fileName }}</div>
-
             </div>
 
         </div>
