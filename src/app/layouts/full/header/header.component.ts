@@ -93,30 +93,30 @@ export class AppHeaderComponent {
     })
   }
 
-  edit() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "30%";
-    dialogConfig.disableClose = true;
+  // edit() {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.width = "30%";
+  //   dialogConfig.disableClose = true;
 
-    this.userService.getUserLogin().subscribe((response: any) => {
-      dialogConfig.data = {
-        user: response
-      };
+  //   this.userService.getUserLogin().subscribe((response: any) => {
+  //     dialogConfig.data = {
+  //       user: response
+  //     };
 
-      const dialogRef = this.dialog.open(InformationComponent, dialogConfig);
+  //     const dialogRef = this.dialog.open(InformationComponent, dialogConfig);
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result === 2) {
-          dialogRef.close();
-          this.snackbarService.openSnackbar("Chỉnh sửa thông tin thành công", "success");
-        } else if (result === 1) {
-          dialogRef.close();
-          this.snackbarService.openSnackbar("Chỉnh sửa thông tin không thành công", "success");
-        }
-      });
+  //     dialogRef.afterClosed().subscribe(result => {
+  //       if (result === 2) {
+  //         dialogRef.close();
+  //         this.snackbarService.openSnackbar("Chỉnh sửa thông tin thành công", "success");
+  //       } else if (result === 1) {
+  //         dialogRef.close();
+  //         this.snackbarService.openSnackbar("Chỉnh sửa thông tin không thành công", "success");
+  //       }
+  //     });
 
-    });
-  }
+  //   });
+  // }
 
   view() {
     const dialogConfig = new MatDialogConfig();

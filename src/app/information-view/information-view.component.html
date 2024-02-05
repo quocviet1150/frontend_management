@@ -31,12 +31,16 @@
         </div>
         <div fxLayout="row wrap">
             <mat-label style="color: red; margin-bottom: 2%;">Ảnh đại diện:</mat-label>
-            <div class="text-center" style="display: grid; width: 100%;justify-content: start;">
-                <img *ngIf="user.imageBase64 && !selectedImage" [src]="'data:image/jpg;base64,' + user.imageBase64 "
-                    alt="" class="imageBase64">
-                <img *ngIf="!user.imageBase64 && !selectedImage" src="../../assets/img/images.png" alt=""
-                    class="imageBase64">
+            <div class="text-center" style="display: grid; width: 100%; justify-content: center;">
+                <div style="position: relative; display: inline-block;">
+                    <img *ngIf="user.imageBase64 && !selectedImage" [src]="'data:image/jpg;base64,' + user.imageBase64 "
+                        alt="" class="imageBase64">
+                    <img *ngIf="!user.imageBase64 && !selectedImage" src="../../assets/img/images.png" alt=""
+                        class="imageBase64">
+                    <mat-icon class="icon-edit" (click)="edit()">edit</mat-icon>
+                </div>
             </div>
+
 
         </div>
     </div>
